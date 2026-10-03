@@ -1,0 +1,2178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color"
+content="#0b1220">
+
+<title>KRON Study AI</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#070d18;
+    color:#ffffff;
+}
+
+header{
+    padding:18px;
+    background:#0b1220;
+    border-bottom:1px solid #1d2a43;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+header h1{
+    margin:0;
+    font-size:24px;
+}
+
+header p{
+    margin:6px 0 0;
+    color:#8fa3c4;
+    font-size:14px;
+}
+
+nav{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding:10px;
+    background:#0b1220;
+    border-bottom:1px solid #1d2a43;
+}
+
+nav button{
+    border:1px solid #263653;
+    background:#10182a;
+    color:#ffffff;
+    padding:10px 14px;
+    border-radius:10px;
+    white-space:nowrap;
+}
+
+main{
+    max-width:900px;
+    margin:auto;
+    padding:16px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.card{
+    background:#0d1627;
+    border:1px solid #1d2a43;
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:14px;
+}
+
+.card h2,
+.card h3{
+    margin-top:0;
+}
+
+.muted{
+    color:#8fa3c4;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    margin-bottom:12px;
+    background:#10182a;
+    color:#ffffff;
+    border:1px solid #263653;
+    border-radius:10px;
+    font-size:15px;
+}
+
+textarea{
+    min-height:130px;
+    resize:vertical;
+}
+
+button{
+    cursor:pointer;
+}
+
+.primary{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:10px;
+    background:#2563eb;
+    color:#ffffff;
+    font-size:16px;
+}
+
+.secondary{
+    padding:10px 14px;
+    border:1px solid #263653;
+    border-radius:10px;
+    background:#10182a;
+    color:#ffffff;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.stat{
+    text-align:center;
+    padding:16px;
+    background:#10182a;
+    border:1px solid #263653;
+    border-radius:12px;
+}
+
+.stat strong{
+    display:block;
+    font-size:24px;
+    margin-bottom:5px;
+}
+
+a{
+    color:#60a5fa;
+}
+
+@media(max-width:600px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    header h1{
+        font-size:21px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>KRON Study AI</h1>
+
+<p>
+Your web-powered secondary school study assistant
+</p>
+
+</header>
+
+<nav>
+
+<button onclick="showPage('home')">
+Home
+</button>
+
+<button onclick="showPage('tutor')">
+AI Tutor
+</button>
+
+<button onclick="showPage('quiz')">
+Quiz
+</button>
+
+<button onclick="showPage('notes')">
+Notes
+</button>
+
+<button onclick="showPage('planner')">
+Planner
+</button>
+
+<button onclick="showPage('progress')">
+Progress
+</button>
+
+</nav>
+
+<main>
+
+<section id="home"
+class="page active">
+
+<div class="card">
+
+<h2>Welcome to KRON</h2>
+
+<p>
+Study smarter with web-powered learning tools.
+</p>
+
+<p class="muted">
+Search educational sources, practise questions,
+save notes and track your progress.
+</p>
+
+</div>
+
+<div class="grid">
+
+<div class="stat">
+
+<strong id="homeQuizzes">
+0
+</strong>
+
+<span class="muted">
+Quizzes
+</span>
+
+</div>
+
+<div class="stat">
+
+<strong id="homeAccuracy">
+0%
+</strong>
+
+<span class="muted">
+Accuracy
+</span>
+
+</div>
+
+<div class="stat">
+
+<strong id="homeNotes">
+0
+</strong>
+
+<span class="muted">
+Notes
+</span>
+
+</div>
+
+<div class="stat">
+
+<strong id="homeSessions">
+0
+</strong>
+
+<span class="muted">
+Study Sessions
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="tutor"
+class="page">
+
+<div class="card">
+
+<h2>AI Tutor</h2>
+
+<p class="muted">
+Ask a question and KRON will search the web
+for educational sources.
+</p>
+
+<label>
+Subject
+</label>
+
+<select id="tutorSubject">
+
+<option value="">
+Select subject
+</option>
+
+</select>
+
+<label>
+Your Question
+</label>
+
+<textarea
+id="tutorQuestion"
+placeholder="Ask KRON a study question...">
+</textarea>
+
+<button
+class="primary"
+onclick="askKRON()">
+
+Search the Web
+
+</button>
+
+</div>
+
+<div id="tutorResult"></div>
+
+</section>
+
+<section id="quiz"
+class="page">
+
+<div class="card">
+
+<h2>Web Quiz</h2>
+
+<p class="muted">
+Find WAEC practice resources from the web.
+</p>
+
+<label>
+Subject
+</label>
+
+<select id="quizSubject">
+
+<option value="">
+Select subject
+</option>
+
+</select>
+
+<label>
+Number of questions
+</label>
+
+<select id="quizCount">
+
+<option value="5">
+5
+</option>
+
+<option value="10">
+10
+</option>
+
+<option value="15">
+15
+</option>
+
+<option value="20">
+20
+</option>
+
+</select>
+
+<button
+class="primary"
+onclick="generateQuiz()">
+
+Search for Practice Questions
+
+</button>
+
+</div>
+
+<div id="quizArea"></div>
+
+  </section>
+  <section id="notes"
+class="page">
+
+<div class="card">
+
+<h2>Study Notes</h2>
+
+<label>
+Note Title
+</label>
+
+<input
+id="noteTitle"
+type="text"
+placeholder="Example: Algebra formulas">
+
+<label>
+Note
+</label>
+
+<textarea
+id="noteText"
+placeholder="Write your study note here...">
+</textarea>
+
+<button
+class="primary"
+onclick="saveNote()">
+
+Save Note
+
+</button>
+
+</div>
+
+<div id="notesList"></div>
+
+</section>
+
+
+<section id="planner"
+class="page">
+
+<div class="card">
+
+<h2>Study Planner</h2>
+
+<p class="muted">
+Create a simple study schedule.
+</p>
+
+<label>
+Subject
+</label>
+
+<select id="planSubject">
+
+<option value="">
+Select subject
+</option>
+
+</select>
+
+<label>
+Date
+</label>
+
+<input
+id="planDate"
+type="date">
+
+<label>
+Time
+</label>
+
+<input
+id="planTime"
+type="time">
+
+<label>
+Topic
+</label>
+
+<input
+id="planTopic"
+type="text"
+placeholder="What will you study?">
+
+<button
+class="primary"
+onclick="makePlan()">
+
+Add Study Plan
+
+</button>
+
+</div>
+
+<div id="plannerList"></div>
+
+</section>
+
+
+<section id="progress"
+class="page">
+
+<div class="card">
+
+<h2>My Progress</h2>
+
+<div class="grid">
+
+<div class="stat">
+
+<strong id="progressQuizzes">
+0
+</strong>
+
+<span class="muted">
+Quizzes
+</span>
+
+</div>
+
+<div class="stat">
+
+<strong id="progressCorrect">
+0
+</strong>
+
+<span class="muted">
+Correct
+</span>
+
+</div>
+
+<div class="stat">
+
+<strong id="progressTotal">
+0
+</strong>
+
+<span class="muted">
+Total Questions
+</span>
+
+</div>
+
+<div class="stat">
+
+<strong id="progressAccuracy">
+0%
+</strong>
+
+<span class="muted">
+Accuracy
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>Study History</h3>
+
+<div id="historyList">
+
+<div class="empty muted">
+No study activity yet.
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<button
+class="secondary"
+onclick="resetProgress()">
+
+Reset Progress
+
+</button>
+
+</div>
+
+</section>
+
+
+</main>
+
+
+<script>
+
+/* =========================
+   SUBJECTS
+========================= */
+
+var subjects = [
+
+"English Language",
+"Mathematics",
+"Physics",
+"Chemistry",
+"Biology",
+"Further Mathematics",
+"Agricultural Science",
+"Economics",
+"Government",
+"Commerce",
+"Accounting",
+"Geography",
+"Literature in English",
+"Christian Religious Studies",
+"Islamic Religious Studies",
+"Civic Education",
+"Computer Studies",
+"Data Processing",
+"Technical Drawing",
+"Basic Electricity",
+"Basic Technology",
+"Building Construction",
+"Woodwork",
+"Metalwork",
+"Auto Mechanics",
+"Electronics",
+"Food and Nutrition",
+"Home Management",
+"Clothing and Textiles",
+"Visual Art",
+"Music",
+"French",
+"Yoruba",
+"Igbo",
+"Hausa",
+"Marketing",
+"Office Practice",
+"Insurance",
+"Animal Husbandry",
+"Fisheries",
+"Forestry",
+"Physical Education",
+"Health Education",
+"Photography"
+
+];
+
+
+/* =========================
+   APP DATA
+========================= */
+
+var appData = {
+
+quizzes:0,
+
+correct:0,
+
+total:0,
+
+sessions:0,
+
+notes:[],
+
+plans:[],
+
+history:[]
+
+};
+
+
+var currentQuiz = [];
+
+var currentSubject = "";
+
+var quizStarted = false;
+
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+function showPage(page){
+
+    var pages =
+        document.querySelectorAll(".page");
+
+    pages.forEach(function(item){
+
+        item.classList.remove("active");
+
+    });
+
+    var selected =
+        document.getElementById(page);
+
+    if(selected){
+
+        selected.classList.add("active");
+
+    }
+
+    window.scrollTo(0,0);
+
+}
+
+
+/* =========================
+   LOAD SUBJECTS
+========================= */
+
+function loadSubjects(){
+
+    var selects = [
+
+        document.getElementById("tutorSubject"),
+
+        document.getElementById("quizSubject"),
+
+        document.getElementById("planSubject")
+
+    ];
+
+    selects.forEach(function(select){
+
+        if(!select){
+            return;
+        }
+
+        subjects.forEach(function(subject){
+
+            var option =
+                document.createElement("option");
+
+            option.value = subject;
+
+            option.textContent = subject;
+
+            select.appendChild(option);
+
+        });
+
+    });
+
+}
+
+
+/* =========================
+   SECURITY HELPERS
+========================= */
+
+function escapeHTML(value){
+
+    return String(value)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttribute(value){
+
+    return String(value)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;");
+
+}
+      
+/* =========================
+   AI TUTOR WEB SEARCH
+========================= */
+
+function askKRON(){
+
+    var subject =
+        document.getElementById("tutorSubject").value;
+
+    var question =
+        document.getElementById("tutorQuestion").value.trim();
+
+    var result =
+        document.getElementById("tutorResult");
+
+    if(!subject || !question){
+
+        result.innerHTML =
+            "<div class='card'>" +
+            "<span class='muted'>" +
+            "Please select a subject and enter a question." +
+            "</span>" +
+            "</div>";
+
+        return;
+    }
+
+    result.innerHTML =
+        "<div class='card'>" +
+        "<h3>Searching the Web...</h3>" +
+        "<p class='muted'>" +
+        "KRON is looking for reliable educational sources." +
+        "</p>" +
+        "</div>";
+
+    fetch("/api/search",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            subject:subject,
+
+            question:question
+
+        })
+
+    })
+
+    .then(function(response){
+
+        return response.json();
+
+    })
+
+    .then(function(data){
+
+        if(data.error){
+
+            result.innerHTML =
+                "<div class='card'>" +
+                "<span class='muted'>" +
+                escapeHTML(data.error) +
+                "</span>" +
+                "</div>";
+
+            return;
+        }
+
+        displayWebResults(data);
+
+    })
+
+    .catch(function(error){
+
+        result.innerHTML =
+            "<div class='card'>" +
+            "<span class='muted'>" +
+            "Could not connect to the web. Please try again." +
+            "</span>" +
+            "</div>";
+
+    });
+
+}
+
+
+/* =========================
+   DISPLAY WEB RESULTS
+========================= */
+
+function displayWebResults(data){
+
+    var result =
+        document.getElementById("tutorResult");
+
+    var results =
+        data.results || [];
+
+    if(!results.length){
+
+        result.innerHTML =
+            "<div class='card'>" +
+            "<span class='muted'>" +
+            "No web results were found." +
+            "</span>" +
+            "</div>";
+
+        return;
+    }
+
+    var html =
+        "<div class='card'>" +
+
+        "<h3>Web Sources</h3>" +
+
+        "<p class='muted'>" +
+
+        "KRON found these sources for your question." +
+
+        "</p>";
+
+    results.forEach(function(item,index){
+
+        html +=
+
+            "<div class='card' " +
+            "style='margin-top:12px;'>" +
+
+            "<strong>" +
+
+            (index + 1) +
+
+            ". " +
+
+            escapeHTML(
+                item.title ||
+                "Educational source"
+            ) +
+
+            "</strong>" +
+
+            "<p>" +
+
+            escapeHTML(
+                item.snippet || ""
+            ) +
+
+            "</p>" +
+
+            "<a href='" +
+
+            escapeAttribute(
+                item.url || "#"
+            ) +
+
+            "' target='_blank' " +
+
+            "rel='noopener noreferrer'>" +
+
+            "Open source" +
+
+            "</a>" +
+
+            "</div>";
+
+    });
+
+    html += "</div>";
+
+    result.innerHTML = html;
+
+}
+
+
+/* =========================
+   WEB QUIZ SEARCH
+========================= */
+
+function generateQuiz(){
+
+    var subject =
+        document.getElementById("quizSubject").value;
+
+    var count =
+        parseInt(
+            document.getElementById("quizCount").value
+        );
+
+    var area =
+        document.getElementById("quizArea");
+
+    if(!subject){
+
+        area.innerHTML =
+            "<div class='card'>" +
+
+            "<span class='muted'>" +
+
+            "Please select a subject first." +
+
+            "</span>" +
+
+            "</div>";
+
+        return;
+    }
+
+    currentSubject = subject;
+
+    area.innerHTML =
+        "<div class='card'>" +
+
+        "<h3>Searching the Web...</h3>" +
+
+        "<p class='muted'>" +
+
+        "KRON is finding " +
+
+        count +
+
+        " " +
+
+        escapeHTML(subject) +
+
+        " practice questions." +
+
+        "</p>" +
+
+        "</div>";
+
+    fetch("/api/search",{
+
+        method:"POST",
+
+        headers:{
+
+            "Content-Type":
+            "application/json"
+
+        },
+
+        body:JSON.stringify({
+
+            subject:subject,
+
+            question:
+
+                "Find " +
+
+                count +
+
+                " WAEC practice questions for " +
+
+                subject +
+
+                " from reliable educational websites."
+
+        })
+
+    })
+
+    .then(function(response){
+
+        return response.json();
+
+    })
+
+    .then(function(data){
+
+        if(data.error){
+
+            area.innerHTML =
+                "<div class='card'>" +
+
+                "<span class='muted'>" +
+
+                escapeHTML(data.error) +
+
+                "</span>" +
+
+                "</div>";
+
+            return;
+        }
+
+        renderWebQuiz(data);
+
+    })
+
+    .catch(function(error){
+
+        area.innerHTML =
+            "<div class='card'>" +
+
+            "<span class='muted'>" +
+
+            "Could not connect to the web. " +
+
+            "Please try again." +
+
+            "</span>" +
+
+            "</div>";
+
+    });
+
+}
+
+
+/* =========================
+   WEB QUIZ RESULTS
+========================= */
+
+function renderWebQuiz(data){
+
+    var area =
+        document.getElementById("quizArea");
+
+    var results =
+        data.results || [];
+
+    if(!results.length){
+
+        area.innerHTML =
+            "<div class='card'>" +
+
+            "<span class='muted'>" +
+
+            "No web results were found. Try again." +
+
+            "</span>" +
+
+            "</div>";
+
+        return;
+    }
+
+    var html =
+        "<div class='card'>" +
+
+        "<h3>Web Results</h3>" +
+
+        "<p class='muted'>" +
+
+        "Study these sources for " +
+
+        escapeHTML(currentSubject) +
+
+        ".</p>";
+
+    results.forEach(function(item,index){
+
+        html +=
+
+            "<div class='card' " +
+
+            "style='margin-top:12px;'>" +
+
+            "<strong>" +
+
+            (index + 1) +
+
+            ". " +
+
+            escapeHTML(
+
+                item.title ||
+
+                "Study resource"
+
+            ) +
+
+            "</strong>" +
+
+            "<p>" +
+
+            escapeHTML(
+
+                item.snippet || ""
+
+            ) +
+
+            "</p>" +
+
+            "<a href='" +
+
+            escapeAttribute(
+
+                item.url || "#"
+
+            ) +
+
+            "' target='_blank' " +
+
+            "rel='noopener noreferrer'>" +
+
+            "Open source" +
+
+            "</a>" +
+
+            "</div>";
+
+    });
+
+    html += "</div>";
+
+    area.innerHTML = html;
+
+  }
+  /* =========================
+   QUIZ DISPLAY
+========================= */
+
+function renderQuiz(){
+
+    var area =
+        document.getElementById("quizArea");
+
+    if(!currentQuiz.length){
+
+        area.innerHTML =
+            "<div class='card'>" +
+            "<span class='muted'>" +
+            "No quiz questions available." +
+            "</span>" +
+            "</div>";
+
+        return;
+    }
+
+    var html =
+        "<div class='card'>" +
+
+        "<h2>" +
+        escapeHTML(currentSubject) +
+        " Quiz" +
+        "</h2>" +
+
+        "<p>" +
+        currentQuiz.length +
+        " questions" +
+        "</p>" +
+
+        "</div>";
+
+    currentQuiz.forEach(function(item,index){
+
+        html +=
+
+            "<div class='card'>" +
+
+            "<h3>" +
+
+            (index + 1) +
+
+            ". " +
+
+            escapeHTML(item.question) +
+
+            "</h3>";
+
+        item.options.forEach(function(option,optIndex){
+
+            html +=
+
+                "<label " +
+
+                "style='display:block;" +
+
+                "padding:12px;" +
+
+                "margin-top:8px;" +
+
+                "background:#10182a;" +
+
+                "border:1px solid #263653;" +
+
+                "border-radius:10px;'>" +
+
+                "<input " +
+
+                "type='radio' " +
+
+                "name='question" +
+
+                index +
+
+                "' " +
+
+                "value='" +
+
+                optIndex +
+
+                "' " +
+
+                "style='width:auto;" +
+
+                "margin-right:8px;'>" +
+
+                escapeHTML(option) +
+
+                "</label>";
+
+        });
+
+        html += "</div>";
+
+    });
+
+    html +=
+
+        "<button " +
+
+        "class='primary' " +
+
+        "onclick='finishQuiz()'>" +
+
+        "Finish Quiz" +
+
+        "</button>";
+
+    area.innerHTML = html;
+
+}
+
+
+/* =========================
+   FINISH QUIZ
+========================= */
+
+function finishQuiz(){
+
+    if(!quizStarted || !currentQuiz.length){
+
+        return;
+    }
+
+    var score = 0;
+
+    var answered = 0;
+
+    currentQuiz.forEach(function(item,index){
+
+        var selected =
+
+            document.querySelector(
+
+                "input[name='question" +
+
+                index +
+
+                "']:checked"
+
+            );
+
+        if(selected){
+
+            answered++;
+
+            if(
+
+                parseInt(selected.value) ===
+
+                item.answer
+
+            ){
+
+                score++;
+
+            }
+
+        }
+
+    });
+
+    appData.quizzes++;
+
+    appData.correct += score;
+
+    appData.total += currentQuiz.length;
+
+    appData.sessions++;
+
+    appData.history.push({
+
+        type:"Quiz",
+
+        subject:currentSubject,
+
+        score:score,
+
+        total:currentQuiz.length,
+
+        date:new Date().toLocaleString()
+
+    });
+
+    saveData();
+
+    renderProgress();
+
+    renderHistory();
+
+    updateDashboard();
+
+    var area =
+        document.getElementById("quizArea");
+
+    var percentage =
+
+        Math.round(
+
+            (score / currentQuiz.length) * 100
+
+        );
+
+    area.innerHTML =
+
+        "<div class='card'>" +
+
+        "<h2>Quiz Complete</h2>" +
+
+        "<p style='font-size:22px;" +
+
+        "margin:15px 0;'>" +
+
+        score +
+
+        " / " +
+
+        currentQuiz.length +
+
+        "</p>" +
+
+        "<p>" +
+
+        percentage +
+
+        "% correct" +
+
+        "</p>" +
+
+        "<p style='margin-top:10px;'>" +
+
+        answered +
+
+        " questions answered." +
+
+        "</p>" +
+
+        "<button " +
+
+        "class='primary' " +
+
+        "style='margin-top:16px;' " +
+
+        "onclick='showPage(\"progress\")'>" +
+
+        "View Progress" +
+
+        "</button>" +
+
+        "</div>";
+
+    quizStarted = false;
+
+}
+
+
+/* =========================
+   NOTES
+========================= */
+
+function saveNote(){
+
+    var title =
+
+        document.getElementById("noteTitle")
+        .value.trim();
+
+    var text =
+
+        document.getElementById("noteText")
+        .value.trim();
+
+    if(!title || !text){
+
+        alert(
+            "Please enter a title and note."
+        );
+
+        return;
+    }
+
+    appData.notes.push({
+
+        title:title,
+
+        text:text,
+
+        date:new Date().toLocaleString()
+
+    });
+
+    saveData();
+
+    document.getElementById(
+        "noteTitle"
+    ).value = "";
+
+    document.getElementById(
+        "noteText"
+    ).value = "";
+
+    renderNotes();
+
+    updateDashboard();
+
+}
+
+
+function renderNotes(){
+
+    var container =
+        document.getElementById("notesList");
+
+    if(!container){
+
+        return;
+    }
+
+    if(!appData.notes.length){
+
+        container.innerHTML =
+
+            "<div class='card'>" +
+
+            "<span class='muted'>" +
+
+            "No notes saved yet." +
+
+            "</span>" +
+
+            "</div>";
+
+        return;
+    }
+
+    var html = "";
+
+    appData.notes.forEach(
+        function(note,index){
+
+        html +=
+
+            "<div class='card'>" +
+
+            "<h3>" +
+
+            escapeHTML(note.title) +
+
+            "</h3>" +
+
+            "<p " +
+
+            "style='white-space:pre-wrap;" +
+
+            "margin-top:10px;'>" +
+
+            escapeHTML(note.text) +
+
+            "</p>" +
+
+            "<p class='muted' " +
+
+            "style='margin-top:12px;'>" +
+
+            escapeHTML(note.date) +
+
+            "</p>" +
+
+            "<button " +
+
+            "class='secondary' " +
+
+            "style='margin-top:12px;' " +
+
+            "onclick='deleteNote(" +
+
+            index +
+
+            ")'>" +
+
+            "Delete" +
+
+            "</button>" +
+
+            "</div>";
+
+    });
+
+    container.innerHTML = html;
+
+}
+
+
+function deleteNote(index){
+
+    if(!confirm(
+        "Delete this note?"
+    )){
+
+        return;
+    }
+
+    appData.notes.splice(index,1);
+
+    saveData();
+
+    renderNotes();
+
+    updateDashboard();
+
+}
+
+
+/* =========================
+   STUDY PLANNER
+========================= */
+
+function makePlan(){
+
+    var subject =
+        document.getElementById(
+            "planSubject"
+        ).value;
+
+    var date =
+        document.getElementById(
+            "planDate"
+        ).value;
+
+    var time =
+        document.getElementById(
+            "planTime"
+        ).value;
+
+    var topic =
+        document.getElementById(
+            "planTopic"
+        ).value.trim();
+
+    if(
+        !subject ||
+        !date ||
+        !time ||
+        !topic
+    ){
+
+        alert(
+            "Please complete all study plan fields."
+        );
+
+        return;
+    }
+
+    appData.plans.push({
+
+        subject:subject,
+
+        date:date,
+
+        time:time,
+
+        topic:topic
+
+    });
+
+    saveData();
+
+    document.getElementById(
+        "planDate"
+    ).value = "";
+
+    document.getElementById(
+        "planTime"
+    ).value = "";
+
+    document.getElementById(
+        "planTopic"
+    ).value = "";
+
+    renderPlans();
+
+  }
+  function renderPlans(){
+
+    var container =
+        document.getElementById("plannerList");
+
+    if(!container){
+
+        return;
+    }
+
+    if(!appData.plans.length){
+
+        container.innerHTML =
+
+            "<div class='card'>" +
+
+            "<span class='muted'>" +
+
+            "No study plans yet." +
+
+            "</span>" +
+
+            "</div>";
+
+        return;
+    }
+
+    var html = "";
+
+    appData.plans.forEach(
+        function(plan,index){
+
+        html +=
+
+            "<div class='card'>" +
+
+            "<h3>" +
+
+            escapeHTML(plan.subject) +
+
+            "</h3>" +
+
+            "<p>" +
+
+            escapeHTML(plan.topic) +
+
+            "</p>" +
+
+            "<p class='muted' " +
+
+            "style='margin-top:8px;'>" +
+
+            escapeHTML(plan.date) +
+
+            " at " +
+
+            escapeHTML(plan.time) +
+
+            "</p>" +
+
+            "<button " +
+
+            "class='secondary' " +
+
+            "style='margin-top:12px;' " +
+
+            "onclick='deletePlan(" +
+
+            index +
+
+            ")'>" +
+
+            "Delete Plan" +
+
+            "</button>" +
+
+            "</div>";
+
+    });
+
+    container.innerHTML = html;
+
+}
+
+
+function deletePlan(index){
+
+    if(!confirm(
+        "Delete this study plan?"
+    )){
+
+        return;
+    }
+
+    appData.plans.splice(index,1);
+
+    saveData();
+
+    renderPlans();
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function renderProgress(){
+
+    var quizzes =
+        document.getElementById(
+            "progressQuizzes"
+        );
+
+    var correct =
+        document.getElementById(
+            "progressCorrect"
+        );
+
+    var total =
+        document.getElementById(
+            "progressTotal"
+        );
+
+    var accuracy =
+        document.getElementById(
+            "progressAccuracy"
+        );
+
+    if(quizzes){
+
+        quizzes.textContent =
+            appData.quizzes;
+
+    }
+
+    if(correct){
+
+        correct.textContent =
+            appData.correct;
+
+    }
+
+    if(total){
+
+        total.textContent =
+            appData.total;
+
+    }
+
+    if(accuracy){
+
+        var percent = 0;
+
+        if(appData.total > 0){
+
+            percent =
+
+                Math.round(
+
+                    (appData.correct /
+                    appData.total) * 100
+
+                );
+
+        }
+
+        accuracy.textContent =
+            percent + "%";
+
+    }
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function renderHistory(){
+
+    var container =
+        document.getElementById(
+            "historyList"
+        );
+
+    if(!container){
+
+        return;
+    }
+
+    if(!appData.history.length){
+
+        container.innerHTML =
+
+            "<div class='empty muted'>" +
+
+            "No study activity yet." +
+
+            "</div>";
+
+        return;
+    }
+
+    var html = "";
+
+    appData.history
+        .slice()
+        .reverse()
+        .forEach(function(item){
+
+        html +=
+
+            "<div style='" +
+
+            "padding:13px 0;" +
+
+            "border-bottom:1px solid #202d49;" +
+
+            "'>" +
+
+            "<strong>" +
+
+            escapeHTML(item.type) +
+
+            "</strong><br>" +
+
+            "<span class='muted'>" +
+
+            escapeHTML(item.subject) +
+
+            "</span><br>" +
+
+            "<span class='muted'>" +
+
+            escapeHTML(item.score) +
+
+            "/" +
+
+            escapeHTML(item.total) +
+
+            " • " +
+
+            escapeHTML(item.date) +
+
+            "</span>" +
+
+            "</div>";
+
+    });
+
+    container.innerHTML = html;
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function updateDashboard(){
+
+    var quizzes =
+        document.getElementById(
+            "homeQuizzes"
+        );
+
+    var accuracy =
+        document.getElementById(
+            "homeAccuracy"
+        );
+
+    var notes =
+        document.getElementById(
+            "homeNotes"
+        );
+
+    var sessions =
+        document.getElementById(
+            "homeSessions"
+        );
+
+    if(quizzes){
+
+        quizzes.textContent =
+            appData.quizzes;
+
+    }
+
+    if(notes){
+
+        notes.textContent =
+            appData.notes.length;
+
+    }
+
+    if(sessions){
+
+        sessions.textContent =
+            appData.sessions;
+
+    }
+
+    if(accuracy){
+
+        var percent = 0;
+
+        if(appData.total > 0){
+
+            percent =
+
+                Math.round(
+
+                    (appData.correct /
+                    appData.total) * 100
+
+                );
+
+        }
+
+        accuracy.textContent =
+            percent + "%";
+
+    }
+
+}
+
+
+/* =========================
+   RESET PROGRESS
+========================= */
+
+function resetProgress(){
+
+    if(!confirm(
+        "Reset all quiz and study progress?"
+    )){
+
+        return;
+    }
+
+    appData.quizzes = 0;
+
+    appData.correct = 0;
+
+    appData.total = 0;
+
+    appData.sessions = 0;
+
+    appData.history = [];
+
+    saveData();
+
+    renderProgress();
+
+    renderHistory();
+
+    updateDashboard();
+
+}
+
+
+/* =========================
+   LOCAL STORAGE
+========================= */
+
+function saveData(){
+
+    try{
+
+        localStorage.setItem(
+
+            "KRON_APP_DATA",
+
+            JSON.stringify(appData)
+
+        );
+
+    }catch(error){
+
+        console.log(
+
+            "Could not save KRON data.",
+
+            error
+
+        );
+
+    }
+
+}
+
+
+function loadData(){
+
+    try{
+
+        var saved =
+
+            localStorage.getItem(
+                "KRON_APP_DATA"
+            );
+
+        if(!saved){
+
+            return;
+        }
+
+        var data =
+            JSON.parse(saved);
+
+        if(!data){
+
+            return;
+        }
+
+        appData.quizzes =
+            Number(data.quizzes) || 0;
+
+        appData.correct =
+            Number(data.correct) || 0;
+
+        appData.total =
+            Number(data.total) || 0;
+
+        appData.sessions =
+            Number(data.sessions) || 0;
+
+        appData.notes =
+
+            Array.isArray(data.notes)
+
+            ? data.notes
+
+            : [];
+
+        appData.plans =
+
+            Array.isArray(data.plans)
+
+            ? data.plans
+
+            : [];
+
+        appData.history =
+
+            Array.isArray(data.history)
+
+            ? data.history
+
+            : [];
+
+    }catch(error){
+
+        console.log(
+
+            "Could not load KRON data.",
+
+            error
+
+        );
+
+    }
+
+}
+
+
+/* =========================
+   START KRON
+========================= */
+
+loadData();
+
+loadSubjects();
+
+renderNotes();
+
+renderPlans();
+
+renderProgress();
+
+renderHistory();
+
+updateDashboard();
+
+</script>
+
+</body>
+
+</html>
