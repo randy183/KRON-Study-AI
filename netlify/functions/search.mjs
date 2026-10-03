@@ -27,30 +27,14 @@ export default async (req) => {
         if (!subject || !question) {
             return new Response(
                 JSON.stringify({
-                    error: "Subject and question are required."
+                    error:
+                        "Subject and question are required."
                 }),
                 {
                     status: 400,
                     headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
-            );
-        }
-
-        const apiKey =
-            process.env.BRAVE_SEARCH_API_KEY;
-
-        if (!apiKey) {
-            return new Response(
-                JSON.stringify({
-                    error:
-                        "Search API key is not connected yet."
-                }),
-                {
-                    status: 500,
-                    headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type":
+                            "application/json"
                     }
                 }
             );
@@ -60,32 +44,29 @@ export default async (req) => {
             subject +
             " " +
             question +
-            " Nigerian secondary school WAEC";
+            " WAEC Nigeria";
 
         const url =
-            "https://api.search.brave.com/res/v1/web/search" +
-            "?q=" +
+            "https://freeserp.ai/api.php" +
+            "?index=web" +
+            "&q=" +
             encodeURIComponent(searchQuery) +
-            "&count=8";
+            "&size=8";
 
-        const response = await fetch(url, {
-            headers: {
-                "Accept": "application/json",
-                "X-Subscription-Token": apiKey
-            }
-        });
+        const response =
+            await fetch(url);
 
         if (!response.ok) {
-
             return new Response(
                 JSON.stringify({
                     error:
-                        "Web search failed."
+                        "Free web search failed."
                 }),
                 {
                     status: 502,
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type":
+                            "application/json"
                     }
                 }
             );
@@ -94,24 +75,28 @@ export default async (req) => {
         const data =
             await response.json();
 
+        const rawResults =
+            data.results ||
+            data.web ||
+            [];
+
         const results =
-            data.web &&
-            data.web.results
-                ? data.web.results.map(function(item) {
+            rawResults.map(function(item) {
 
-                    return {
-                        title:
-                            item.title || "",
+                return {
+                    title:
+                        item.title || "",
 
-                        snippet:
-                            item.description || "",
+                    snippet:
+                        item.snippet ||
+                        item.description ||
+                        "",
 
-                        url:
-                            item.url || ""
-                    };
+                    url:
+                        item.url || ""
+                };
 
-                })
-                : [];
+            });
 
         return new Response(
             JSON.stringify({
@@ -121,7 +106,8 @@ export default async (req) => {
             {
                 status: 200,
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
                 }
             }
         );
@@ -136,10 +122,12 @@ export default async (req) => {
             {
                 status: 500,
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
                 }
             }
         );
+
     }
 };
 
