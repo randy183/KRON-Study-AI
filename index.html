@@ -1,0 +1,809 @@
+     "<p class='muted'>KRON is finding " +
+        count + " " + subject +
+        " practice questions.</p>" +
+        "</div>";
+
+    fetch("/api/search",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            subject:subject,
+
+            question:
+                "Find " + count +
+                " WAEC practice questions for " +
+                subject +
+                " from reliable educational websites."
+
+        })
+
+    })
+    .then(function(response){
+        return response.json();
+    })
+    .then(function(data){
+
+        if(data.error){
+
+            area.innerHTML =
+                "<div class='card'>" +
+                "<span class='muted'>" +
+                data.error +
+                "</span></div>";
+
+            return;
+        }
+
+        renderWebQuiz(data);
+
+    })
+    .catch(function(error){
+
+        area.innerHTML =
+            "<div class='card'>" +
+            "<span class='muted'>" +
+            "Could not connect to the web. " +
+            "Please try again." +
+            "</span></div>";
+
+    });
+
+          }
+function renderQuiz(){
+
+    var area =
+        document.getElementById("quizArea");
+
+    if(!currentQuiz.length){
+
+        area.innerHTML =
+            "<div class='card empty'>" +
+            "No quiz questions available." +
+            "</div>";
+
+        return;
+    }
+
+    var html =
+        "<div class='card'>" +
+        "<h2>" +
+        escapeHTML(currentSubject) +
+        " Quiz" +
+        "</h2>" +
+        "<p>" +
+        currentQuiz.length +
+        " questions" +
+        "</p>" +
+        "</div>";
+
+    currentQuiz.forEach(function(item,index){
+
+        html +=
+            "<div class='card'>" +
+
+            "<h2>" +
+            (index + 1) +
+            ". " +
+            escapeHTML(item.question) +
+            "</h2>";
+
+        item.options.forEach(function(option,optIndex){
+
+            html +=
+                "<label style='display:block;" +
+                "padding:12px;" +
+                "margin-top:8px;" +
+                "background:#10182a;" +
+                "border:1px solid #263653;" +
+                "border-radius:10px;'>" +
+
+                "<input " +
+                "type='radio' " +
+                "name='question" + index + "' " +
+                "value='" + optIndex + "'" +
+                " style='width:auto;margin-right:8px;'>" +
+
+                escapeHTML(option) +
+
+                "</label>";
+
+        });
+
+        html += "</div>";
+
+    });
+
+    html +=
+        "<button class='primary' " +
+        "onclick='finishQuiz()'>" +
+        "Finish Quiz" +
+        "</button>";
+
+    area.innerHTML = html;
+}
+
+function renderWebQuiz(data){
+
+    var area =
+        document.getElementById("quizArea");
+
+    var results = data.results || [];
+
+    if(results.length === 0){
+
+        area.innerHTML =
+            "<div class='card'>" +
+            "<span class='muted'>" +
+            "No web results were found. Try again." +
+            "</span></div>";
+
+        return;
+    }
+
+    var html =
+        "<div class='card'>" +
+        "<h3>Web Results</h3>" +
+        "<p class='muted'>" +
+        "Study these sources for " +
+        escapeHTML(currentSubject) +
+        ".</p>";
+
+    results.forEach(function(item, index){
+
+        html +=
+            "<div class='card' style='margin-top:12px;'>" +
+
+            "<strong>" +
+            (index + 1) + ". " +
+            escapeHTML(item.title || "Study resource") +
+            "</strong>" +
+
+            "<p>" +
+            escapeHTML(item.snippet || "") +
+            "</p>" +
+
+            "<a href='" +
+            escapeAttribute(item.url || "#") +
+            "' target='_blank' rel='noopener'>" +
+            "Open source" +
+            "</a>" +
+
+            "</div>";
+
+    });
+
+    html += "</div>";
+
+    area.innerHTML = html;
+    }
+function finishQuiz(){
+
+    if(!quizStarted || !currentQuiz.length){
+
+        return;
+    }
+
+    var score = 0;
+    var answered = 0;
+
+    currentQuiz.forEach(function(item,index){
+
+        var selected =
+            document.querySelector(
+                "input[name='question" +
+                index +
+                "']:checked"
+            );
+
+        if(selected){
+
+            answered++;
+
+            if(
+                parseInt(selected.value) ===
+                item.answer
+            ){
+
+                score++;
+            }
+        }
+
+    });
+
+    appData.quizzes++;
+    appData.correct += score;
+    appData.total += currentQuiz.length;
+
+    appData.sessions++;
+
+    appData.history.push({
+
+        type:"Quiz",
+
+        subject:currentSubject,
+
+        score:score,
+
+        total:currentQuiz.length,
+
+        date:new Date().toLocaleString()
+
+    });
+
+    saveData();
+
+    renderProgress();
+    renderHistory();
+    updateDashboard();
+
+    var area =
+        document.getElementById("quizArea");
+
+    var percentage =
+        Math.round(
+            (score / currentQuiz.length) * 100
+        );
+
+    area.innerHTML =
+        "<div class='card'>" +
+
+        "<h2>Quiz Complete 🎯</h2>" +
+
+        "<p style='font-size:22px;" +
+        "margin:15px 0;'>" +
+
+        score +
+        " / " +
+        currentQuiz.length +
+
+        "</p>" +
+
+        "<p>" +
+        percentage +
+        "% correct</p>" +
+
+        "<p style='margin-top:10px;'>" +
+        answered +
+        " questions answered.</p>" +
+
+        "<button class='primary' " +
+        "style='margin-top:16px;' " +
+        "onclick='showPage(\"progress\")'>" +
+        "View Progress" +
+        "</button>" +
+
+        "</div>";
+
+    quizStarted = false;
+}
+
+
+function saveNote(){
+
+    var title =
+        document.getElementById("noteTitle")
+        .value.trim();
+
+    var text =
+        document.getElementById("noteText")
+        .value.trim();
+
+    if(!title || !text){
+
+        alert("Please enter a title and note.");
+
+        return;
+    }
+
+    appData.notes.push({
+
+        title:title,
+
+        text:text,
+
+        date:new Date().toLocaleString()
+
+    });
+
+    saveData();
+
+    document.getElementById("noteTitle").value = "";
+    document.getElementById("noteText").value = "";
+
+    renderNotes();
+    updateDashboard();
+}
+
+
+function renderNotes(){
+
+    var container =
+        document.getElementById("notesList");
+
+    if(!container){
+        return;
+    }
+
+    if(!appData.notes.length){
+
+        container.innerHTML =
+            "<div class='card empty'>" +
+            "No notes saved yet." +
+            "</div>";
+
+        return;
+    }
+
+    var html = "";
+
+    appData.notes.forEach(function(note,index){
+
+        html +=
+            "<div class='card'>" +
+
+            "<h2>" +
+            escapeHTML(note.title) +
+            "</h2>" +
+
+            "<p style='white-space:pre-wrap;" +
+            "margin-top:10px;'>" +
+            escapeHTML(note.text) +
+            "</p>" +
+
+            "<p class='muted' " +
+            "style='margin-top:12px;'>" +
+            escapeHTML(note.date) +
+            "</p>" +
+
+            "<button class='secondary' " +
+            "style='margin-top:12px;' " +
+            "onclick='deleteNote(" +
+            index +
+            ")'>" +
+            "Delete" +
+            "</button>" +
+
+            "</div>";
+
+    });
+
+    container.innerHTML = html;
+}
+
+
+function deleteNote(index){
+
+    if(!confirm("Delete this note?")){
+        return;
+    }
+
+    appData.notes.splice(index,1);
+
+    saveData();
+
+    renderNotes();
+    updateDashboard();
+}
+
+
+function makePlan(){
+
+    var subject =
+        document.getElementById("planSubject").value;
+
+    var date =
+        document.getElementById("planDate").value;
+
+    var time =
+        document.getElementById("planTime").value;
+
+    var topic =
+        document.getElementById("planTopic").value.trim();
+
+    if(!subject || !date || !time || !topic){
+
+        alert("Please complete all study plan fields.");
+
+        return;
+    }
+
+    appData.plans.push({
+
+        subject:subject,
+
+        date:date,
+
+        time:time,
+
+        topic:topic
+
+    });
+
+    saveData();
+
+    document.getElementById("planDate").value = "";
+    document.getElementById("planTime").value = "";
+    document.getElementById("planTopic").value = "";
+
+    renderPlans();
+}
+
+
+function renderPlans(){
+
+    var container =
+        document.getElementById("plannerList");
+
+    if(!container){
+        return;
+    }
+
+    if(!appData.plans.length){
+
+        container.innerHTML =
+            "<div class='card empty'>" +
+            "No study plans yet." +
+            "</div>";
+
+        return;
+    }
+
+    var html = "";
+
+    appData.plans.forEach(function(plan,index){
+
+        html +=
+            "<div class='card'>" +
+
+            "<h2>" +
+            escapeHTML(plan.subject) +
+            "</h2>" +
+
+            "<p>" +
+            escapeHTML(plan.topic) +
+            "</p>" +
+
+            "<p class='muted' " +
+            "style='margin-top:8px;'>" +
+
+            escapeHTML(plan.date) +
+            " at " +
+            escapeHTML(plan.time) +
+
+            "</p>" +
+
+            "<button class='secondary' " +
+            "style='margin-top:12px;' " +
+            "onclick='deletePlan(" +
+            index +
+            ")'>" +
+
+            "Delete Plan" +
+
+            "</button>" +
+
+            "</div>";
+
+    });
+
+    container.innerHTML = html;
+}
+
+
+function deletePlan(index){
+
+    if(!confirm("Delete this study plan?")){
+        return;
+    }
+
+    appData.plans.splice(index,1);
+
+    saveData();
+
+    renderPlans();
+}
+
+
+  </script>
+  <script>
+
+/* =========================
+   PROGRESS
+========================= */
+
+function renderProgress(){
+
+    var quizzes =
+        document.getElementById("progressQuizzes");
+
+    var correct =
+        document.getElementById("progressCorrect");
+
+    var total =
+        document.getElementById("progressTotal");
+
+    var accuracy =
+        document.getElementById("progressAccuracy");
+
+    if(quizzes){
+        quizzes.textContent =
+            appData.quizzes;
+    }
+
+    if(correct){
+        correct.textContent =
+            appData.correct;
+    }
+
+    if(total){
+        total.textContent =
+            appData.total;
+    }
+
+    if(accuracy){
+
+        var percent = 0;
+
+        if(appData.total > 0){
+
+            percent =
+                Math.round(
+                    (appData.correct /
+                    appData.total) * 100
+                );
+        }
+
+        accuracy.textContent =
+            percent + "%";
+    }
+}
+
+
+/* =========================
+   STUDY HISTORY
+========================= */
+
+function renderHistory(){
+
+    var container =
+        document.getElementById("historyList");
+
+    if(!container){
+        return;
+    }
+
+    if(!appData.history.length){
+
+        container.innerHTML =
+            "<div class='empty'>" +
+            "No study activity yet." +
+            "</div>";
+
+        return;
+    }
+
+    var html = "";
+
+    appData.history
+        .slice()
+        .reverse()
+        .forEach(function(item){
+
+        html +=
+            "<div style='" +
+            "padding:13px 0;" +
+            "border-bottom:1px solid #202d49;" +
+            "'>" +
+
+            "<strong>" +
+            escapeHTML(item.type) +
+            "</strong><br>" +
+
+            "<span class='muted'>" +
+            escapeHTML(item.subject) +
+            "</span><br>" +
+
+            "<span class='muted'>" +
+            escapeHTML(item.score) +
+            "/" +
+            escapeHTML(item.total) +
+            " • " +
+            escapeHTML(item.date) +
+            "</span>" +
+
+            "</div>";
+
+    });
+
+    container.innerHTML = html;
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function updateDashboard(){
+
+    var quizzes =
+        document.getElementById("homeQuizzes");
+
+    var accuracy =
+        document.getElementById("homeAccuracy");
+
+    var notes =
+        document.getElementById("homeNotes");
+
+    var sessions =
+        document.getElementById("homeSessions");
+
+    if(quizzes){
+
+        quizzes.textContent =
+            appData.quizzes;
+    }
+
+    if(notes){
+
+        notes.textContent =
+            appData.notes.length;
+    }
+
+    if(sessions){
+
+        sessions.textContent =
+            appData.sessions;
+    }
+
+    if(accuracy){
+
+        var percent = 0;
+
+        if(appData.total > 0){
+
+            percent =
+                Math.round(
+                    (appData.correct /
+                    appData.total) * 100
+                );
+        }
+
+        accuracy.textContent =
+            percent + "%";
+    }
+}
+
+
+/* =========================
+   RESET PROGRESS
+========================= */
+
+function resetProgress(){
+
+    if(!confirm(
+        "Reset all quiz and study progress?"
+    )){
+
+        return;
+    }
+
+    appData.quizzes = 0;
+    appData.correct = 0;
+    appData.total = 0;
+    appData.sessions = 0;
+    appData.history = [];
+
+    saveData();
+
+    renderProgress();
+    renderHistory();
+    updateDashboard();
+}
+
+
+/* =========================
+   LOCAL STORAGE
+========================= */
+
+function saveData(){
+
+    try{
+
+        localStorage.setItem(
+            "KRON_APP_DATA",
+            JSON.stringify(appData)
+        );
+
+    }catch(error){
+
+        console.log(
+            "Could not save KRON data.",
+            error
+        );
+    }
+}
+
+
+function loadData(){
+
+    try{
+
+        var saved =
+            localStorage.getItem(
+                "KRON_APP_DATA"
+            );
+
+        if(!saved){
+            return;
+        }
+
+        var data =
+            JSON.parse(saved);
+
+        if(!data){
+            return;
+        }
+
+        appData.quizzes =
+            Number(data.quizzes) || 0;
+
+        appData.correct =
+            Number(data.correct) || 0;
+
+        appData.total =
+            Number(data.total) || 0;
+
+        appData.sessions =
+            Number(data.sessions) || 0;
+
+        appData.notes =
+            Array.isArray(data.notes)
+            ? data.notes
+            : [];
+
+        appData.plans =
+            Array.isArray(data.plans)
+            ? data.plans
+            : [];
+
+        appData.history =
+            Array.isArray(data.history)
+            ? data.history
+            : [];
+
+    }catch(error){
+
+        console.log(
+            "Could not load KRON data.",
+            error
+        );
+    }
+}
+
+
+/* =========================
+   START KRON
+========================= */
+
+loadData();
+
+renderNotes();
+
+renderPlans();
+
+renderProgress();
+
+renderHistory();
+
+updateDashboard();
+
+</script>
+
+</body>
+</html>
