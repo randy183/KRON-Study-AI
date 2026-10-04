@@ -43,7 +43,9 @@ export default async (req) => {
             );
         }
 
+        // =========================
         // SAFETY FILTER
+        // =========================
 
         const blockedWords = [
             "porn",
@@ -86,135 +88,58 @@ export default async (req) => {
             );
         }
 
-        // SEARCH QUERY
-
-        let searchQuery = question;
-
-        if (mode === "waec") {
-            searchQuery =
-                "WAEC Nigeria " +
-                subject +
-                " " +
-                question;
-                    }
-                // FREE SEARCH
-
-        const searchUrl =
-            "https://freeserp.ai/api.php" +
-            "?index=web" +
-            "&q=" +
-            encodeURIComponent(searchQuery) +
-            "&size=8";
-
-        let results = [];
-
-        try {
-
-            const searchResponse =
-                await fetch(searchUrl);
-
-            if (searchResponse.ok) {
-
-                const searchData =
-                    await searchResponse.json();
-
-                const rawResults =
-                    searchData.results ||
-                    searchData.web ||
-                    [];
-
-                results =
-                    rawResults.map(item => ({
-                        title:
-                            item.title || "",
-
-                        snippet:
-                            item.snippet ||
-                            item.description ||
-                            "",
-
-                        url:
-                            item.url || ""
-                    }));
-            }
-
-        } catch (searchError) {
-
-            results = [];
-        }
-
-        // OPENROUTER KEY
+        // =========================
+        // OPENROUTER API KEY
+        // =========================
 
         const apiKey =
             process.env.OPENROUTER_API_KEY;
 
         if (!apiKey) {
-
             return new Response(
                 JSON.stringify({
                     error:
-                        "OPENROUTER_API_KEY is not available to the deployed Netlify function.",
-
-                    hint:
-                        "Check the Netlify environment variable and redeploy the site."
+                        "OPENROUTER_API_KEY is missing from Netlify."
                 }),
                 {
                     status: 500,
-
                     headers: {
                         "Content-Type":
                             "application/json"
                     }
                 }
             );
-        }
-
-        // SEARCH RESULTS
-
-        const sourceText =
-            results
-                .map((item, index) => {
-
-                    return (
-                        "SOURCE " +
-                        (index + 1) +
-                        "\nTitle: " +
-                        item.title +
-                        "\nSnippet: " +
-                        item.snippet +
-                        "\nURL: " +
-                        item.url
-                    );
-
-                })
-                .join("\n\n");
-                // AI INSTRUCTIONS
+    }
+                // =========================
+        // AI INSTRUCTIONS
+        // =========================
 
         let systemPrompt = "";
 
-        if (mode === "web") {
-
-            systemPrompt =
-                "You are KRON General Web Search. " +
-                "Answer the user's general question using the supplied web results. " +
-                "This is a separate general web search and is NOT a WAEC search. " +
-                "Use only relevant results. " +
-                "Ignore unrelated results. " +
-                "Do not invent facts. " +
-                "If the results are insufficient, say so clearly.";
-
-        }
-
-        else if (mode === "quiz") {
+        if (mode === "quiz") {
 
             systemPrompt =
                 "You are KRON Quiz Generator. " +
-                "Create a WAEC-style multiple-choice quiz for the requested subject. " +
-                "Use the web results as supporting research. " +
-                "Create clear questions suitable for Nigerian secondary-school students. " +
-                "Return ONLY valid JSON in exactly this structure: " +
+                "Create a WAEC-style multiple-choice quiz. " +
+                "The quiz must be suitable for Nigerian secondary-school students. " +
+                "Use the requested subject and topic. " +
+                "Create clear and educational questions. " +
+                "Each question must have exactly four options. " +
+                "Return ONLY valid JSON in this exact structure: " +
                 "{\"questions\":[{\"question\":\"...\",\"options\":[\"A\",\"B\",\"C\",\"D\"],\"answer\":0,\"explanation\":\"...\"}]} " +
                 "The answer must be the zero-based number of the correct option.";
+
+        }
+
+        else if (mode === "web") {
+
+            systemPrompt =
+                "You are KRON General Search AI. " +
+                "Answer the user's question clearly and accurately. " +
+                "This is a general knowledge request. " +
+                "Do not pretend that you performed a live web search. " +
+                "If the question requires current information that you cannot reliably know, " +
+                "clearly tell the user that the information may need verification.";
 
         }
 
@@ -222,16 +147,17 @@ export default async (req) => {
 
             systemPrompt =
                 "You are KRON Study AI, a Nigerian secondary-school study assistant. " +
-                "The user is asking a WAEC-related educational question. " +
-                "Use the supplied web results as supporting research. " +
-                "Focus on the exact question and subject. " +
-                "Ignore unrelated search results. " +
-                "Explain clearly and simply. " +
-                "For mathematics and calculations, solve the exact problem yourself. " +
-                "Do not invent information.";
+                "Help students understand WAEC-related subjects. " +
+                "Explain answers clearly and simply. " +
+                "Use the requested subject and question. " +
+                "For mathematics and calculations, solve the exact problem carefully. " +
+                "Do not invent information. " +
+                "Teach the student instead of simply giving unexplained answers.";
         }
 
+        // =========================
         // OPENROUTER REQUEST
+        // =========================
 
         const aiResponse =
             await fetch(
@@ -271,14 +197,10 @@ export default async (req) => {
                                 role: "user",
 
                                 content:
-                                    "Mode: " +
-                                    mode +
-                                    "\n\nSubject: " +
+                                    "Subject: " +
                                     subject +
                                     "\n\nUser request:\n" +
-                                    question +
-                                    "\n\nWeb search results:\n" +
-                                    sourceText
+                                    question
                             }
 
                         ]
@@ -286,7 +208,9 @@ export default async (req) => {
                     })
                 }
             );
-                // CHECK OPENROUTER RESPONSE
+                // =========================
+        // CHECK OPENROUTER RESPONSE
+        // =========================
 
         if (!aiResponse.ok) {
 
@@ -343,7 +267,9 @@ export default async (req) => {
             );
         }
 
+        // =========================
         // QUIZ RESPONSE
+        // =========================
 
         if (mode === "quiz") {
 
@@ -361,8 +287,7 @@ export default async (req) => {
                 return new Response(
                     JSON.stringify({
                         mode: "quiz",
-                        quiz: quiz,
-                        results: results
+                        quiz: quiz
                     }),
                     {
                         status: 200,
@@ -394,17 +319,17 @@ export default async (req) => {
                     }
                 );
             }
-        }
-
-        // NORMAL ANSWER
+    }
+                // =========================
+        // NORMAL AI RESPONSE
+        // =========================
 
         return new Response(
             JSON.stringify({
                 mode: mode,
                 subject: subject,
                 question: question,
-                answer: answer,
-                results: results
+                answer: answer
             }),
             {
                 status: 200,
@@ -421,7 +346,7 @@ export default async (req) => {
         return new Response(
             JSON.stringify({
                 error:
-                    "Something went wrong.",
+                    "KRON encountered an unexpected error.",
 
                 details:
                     error.message
@@ -439,7 +364,9 @@ export default async (req) => {
 };
 
 
+// =========================
 // NETLIFY FUNCTION PATH
+// =========================
 
 export const config = {
     path: "/api/search"
