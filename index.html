@@ -1,2178 +1,1374 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
 <meta name="theme-color"
-content="#0b1220">
+      content="#0b0b0b">
 
 <title>KRON Study AI</title>
 
 <style>
 
-*{
-    box-sizing:border-box;
+* {
+    box-sizing: border-box;
 }
 
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#070d18;
-    color:#ffffff;
+body {
+    margin: 0;
+    background: #0b0b0b;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
 }
 
-header{
-    padding:18px;
-    background:#0b1220;
-    border-bottom:1px solid #1d2a43;
-    position:sticky;
-    top:0;
-    z-index:10;
+header {
+    background: #111111;
+    padding: 18px;
+    text-align: center;
+    border-bottom: 1px solid #292929;
 }
 
-header h1{
-    margin:0;
-    font-size:24px;
+header h1 {
+    margin: 0;
+    color: #ff2222;
+    font-size: 28px;
 }
 
-header p{
-    margin:6px 0 0;
-    color:#8fa3c4;
-    font-size:14px;
+header p {
+    margin: 6px 0 0;
+    color: #aaaaaa;
 }
 
-nav{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    padding:10px;
-    background:#0b1220;
-    border-bottom:1px solid #1d2a43;
+nav {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 10px;
+    background: #101010;
+    border-bottom: 1px solid #292929;
 }
 
-nav button{
-    border:1px solid #263653;
-    background:#10182a;
-    color:#ffffff;
-    padding:10px 14px;
-    border-radius:10px;
-    white-space:nowrap;
+nav button {
+    flex: 0 0 auto;
+    background: #1b1b1b;
+    color: white;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
 }
 
-main{
-    max-width:900px;
-    margin:auto;
-    padding:16px;
+nav button.active {
+    background: #b40000;
+    border-color: #ff2222;
 }
 
-.page{
-    display:none;
+main {
+    padding: 15px;
+    max-width: 850px;
+    margin: auto;
 }
 
-.page.active{
-    display:block;
+.page {
+    display: none;
 }
 
-.card{
-    background:#0d1627;
-    border:1px solid #1d2a43;
-    border-radius:14px;
-    padding:16px;
-    margin-bottom:14px;
+.page.active {
+    display: block;
 }
 
-.card h2,
-.card h3{
-    margin-top:0;
+.card {
+    background: #141414;
+    border: 1px solid #292929;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 15px;
 }
 
-.muted{
-    color:#8fa3c4;
+.card h2 {
+    margin-top: 0;
+    color: #ff3333;
 }
 
+textarea,
 input,
-select,
-textarea{
-    width:100%;
-    padding:12px;
-    margin-top:8px;
-    margin-bottom:12px;
-    background:#10182a;
-    color:#ffffff;
-    border:1px solid #263653;
-    border-radius:10px;
-    font-size:15px;
+select {
+    width: 100%;
+    background: #0d0d0d;
+    color: white;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+    font-size: 15px;
 }
 
-textarea{
-    min-height:130px;
-    resize:vertical;
+textarea {
+    min-height: 120px;
+    resize: vertical;
 }
 
-button{
-    cursor:pointer;
+button.primary {
+    width: 100%;
+    background: #c00000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 13px;
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
-.primary{
-    width:100%;
-    padding:13px;
-    border:0;
-    border-radius:10px;
-    background:#2563eb;
-    color:#ffffff;
-    font-size:16px;
+button.primary:active {
+    background: #8f0000;
 }
 
-.secondary{
-    padding:10px 14px;
-    border:1px solid #263653;
-    border-radius:10px;
-    background:#10182a;
-    color:#ffffff;
+.answer {
+    background: #101010;
+    border-left: 3px solid #ff2222;
+    padding: 14px;
+    margin-top: 15px;
+    border-radius: 6px;
+    line-height: 1.6;
+    white-space: pre-wrap;
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
+.result {
+    background: #101010;
+    border: 1px solid #292929;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
 }
 
-.stat{
-    text-align:center;
-    padding:16px;
-    background:#10182a;
-    border:1px solid #263653;
-    border-radius:12px;
+.result a {
+    color: #ff5555;
+    word-break: break-word;
 }
 
-.stat strong{
-    display:block;
-    font-size:24px;
-    margin-bottom:5px;
+.status {
+    color: #999999;
+    margin-top: 10px;
 }
 
-a{
-    color:#60a5fa;
+.ad-banner {
+    width: 100%;
+    min-height: 60px;
+    background: #151515;
+    border: 1px dashed #444444;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666666;
+    margin: 15px 0;
+    font-size: 12px;
 }
 
-@media(max-width:600px){
+.chat-item {
+    background: #101010;
+    border: 1px solid #292929;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 10px;
+}
 
-    .grid{
-        grid-template-columns:1fr;
-    }
+.quiz-question {
+    background: #101010;
+    border: 1px solid #292929;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+}
 
-    header h1{
-        font-size:21px;
-    }
+.quiz-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #181818;
+    color: white;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+}
 
+.quiz-option.selected {
+    border-color: #ff2222;
+    background: #280000;
+}
+
+.score {
+    font-size: 22px;
+    color: #ff3333;
+    font-weight: bold;
+}
+
+.small {
+    font-size: 13px;
+    color: #999999;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <header>
-
-<h1>KRON Study AI</h1>
-
-<p>
-Your web-powered secondary school study assistant
-</p>
-
+    <h1>KRON</h1>
+    <p>Study AI</p>
 </header>
 
 <nav>
 
-<button onclick="showPage('home')">
-Home
-</button>
+    <button class="active"
+            onclick="showPage('home', this)">
+        Home
+    </button>
 
-<button onclick="showPage('tutor')">
-AI Tutor
-</button>
+    <button onclick="showPage('waec', this)">
+        WAEC AI
+    </button>
 
-<button onclick="showPage('quiz')">
-Quiz
-</button>
+    <button onclick="showPage('web', this)">
+        Web Search
+    </button>
 
-<button onclick="showPage('notes')">
-Notes
-</button>
+    <button onclick="showPage('quiz', this)">
+        Quiz
+    </button>
 
-<button onclick="showPage('planner')">
-Planner
-</button>
-
-<button onclick="showPage('progress')">
-Progress
-</button>
+    <button onclick="showPage('history', this)">
+        Chats
+    </button>
 
 </nav>
 
 <main>
 
+<!-- HOME -->
+
 <section id="home"
-class="page active">
+         class="page active">
 
-<div class="card">
+    <div class="card">
 
-<h2>Welcome to KRON</h2>
+        <h2>Welcome to KRON</h2>
 
-<p>
-Study smarter with web-powered learning tools.
-</p>
+        <p>
+            Your study assistant for WAEC subjects
+            and general information.
+        </p>
 
-<p class="muted">
-Search educational sources, practise questions,
-save notes and track your progress.
-</p>
+        <p class="small">
+            Choose WAEC AI for school questions or
+            Web Search for general current information.
+        </p>
 
-</div>
+    </div>
 
-<div class="grid">
-
-<div class="stat">
-
-<strong id="homeQuizzes">
-0
-</strong>
-
-<span class="muted">
-Quizzes
-</span>
-
-</div>
-
-<div class="stat">
-
-<strong id="homeAccuracy">
-0%
-</strong>
-
-<span class="muted">
-Accuracy
-</span>
-
-</div>
-
-<div class="stat">
-
-<strong id="homeNotes">
-0
-</strong>
-
-<span class="muted">
-Notes
-</span>
-
-</div>
-
-<div class="stat">
-
-<strong id="homeSessions">
-0
-</strong>
-
-<span class="muted">
-Study Sessions
-</span>
-
-</div>
-
-</div>
+    <div class="ad-banner">
+        Banner Ad Space
+    </div>
 
 </section>
 
-<section id="tutor"
-class="page">
 
-<div class="card">
+<!-- WAEC AI -->
 
-<h2>AI Tutor</h2>
+<section id="waec"
+         class="page">
 
-<p class="muted">
-Ask a question and KRON will search the web
-for educational sources.
-</p>
+    <div class="card">
 
-<label>
-Subject
-</label>
+        <h2>WAEC AI</h2>
 
-<select id="tutorSubject">
+        <p class="small">
+            Ask a question about your selected WAEC subject.
+        </p>
 
-<option value="">
-Select subject
-</option>
+        <select id="waecSubject">
 
-</select>
+            <option value="">
+                Select subject
+            </option>
 
-<label>
-Your Question
-</label>
+            <option>English Language</option>
+            <option>Mathematics</option>
+            <option>Physics</option>
+            <option>Chemistry</option>
+            <option>Biology</option>
+            <option>Economics</option>
+            <option>Government</option>
+            <option>Commerce</option>
+            <option>Accounting</option>
+            <option>Marketing</option>
+            <option>Geography</option>
+            <option>Literature in English</option>
+            <option>Computer Studies</option>
+            <option>Data Processing</option>
+            <option>Office Practice</option>
+            <option>Christian Religious Studies</option>
+            <option>Islamic Religious Studies</option>
+            <option>Agricultural Science</option>
+            <option>Civic Education</option>
+            <option>Further Mathematics</option>
+            <option>Technical Drawing</option>
+            <option>Food and Nutrition</option>
+            <option>Other WAEC Subject</option>
 
-<textarea
-id="tutorQuestion"
-placeholder="Ask KRON a study question...">
-</textarea>
+        </select>
 
-<button
-class="primary"
-onclick="askKRON()">
+        <textarea
+            id="waecQuestion"
+            placeholder="Ask your WAEC question..."></textarea>
 
-Search the Web
+        <button class="primary"
+                onclick="askWAEC()">
+            Ask KRON
+        </button>
 
-</button>
+        <div id="waecStatus"
+             class="status"></div>
 
-</div>
+        <div id="waecAnswer"></div>
 
-<div id="tutorResult"></div>
+    </div>
 
 </section>
+
+
+<!-- GENERAL WEB SEARCH -->
+
+<section id="web"
+         class="page">
+
+    <div class="card">
+
+        <h2>Web Search</h2>
+
+        <p class="small">
+            Search the web for general information,
+            news and current events.
+        </p>
+
+        <input
+            id="webQuestion"
+            placeholder="Example: What is happening in Nigeria?">
+
+        <button class="primary"
+                onclick="searchWeb()">
+            Search Web
+        </button>
+
+        <div id="webStatus"
+             class="status"></div>
+
+        <div id="webAnswer"></div>
+
+        <div id="webResults"></div>
+
+    </div>
+
+</section>
+
+
+<!-- QUIZ -->
 
 <section id="quiz"
-class="page">
+         class="page">
 
-<div class="card">
+    <div class="card">
 
-<h2>Web Quiz</h2>
+        <h2>WAEC Quiz</h2>
 
-<p class="muted">
-Find WAEC practice resources from the web.
-</p>
+        <select id="quizSubject">
 
-<label>
-Subject
-</label>
+            <option value="">
+                Select subject
+            </option>
 
-<select id="quizSubject">
+            <option>English Language</option>
+            <option>Mathematics</option>
+            <option>Physics</option>
+            <option>Chemistry</option>
+            <option>Biology</option>
+            <option>Economics</option>
+            <option>Government</option>
+            <option>Commerce</option>
+            <option>Accounting</option>
+            <option>Marketing</option>
+            <option>Geography</option>
+            <option>Literature in English</option>
+            <option>Computer Studies</option>
+            <option>Data Processing</option>
+            <option>Office Practice</option>
+            <option>Agricultural Science</option>
+            <option>Civic Education</option>
+            <option>Further Mathematics</option>
 
-<option value="">
-Select subject
-</option>
+        </select>
 
-</select>
+        <button class="primary"
+                onclick="generateQuiz()">
+            Start Quiz
+        </button>
 
-<label>
-Number of questions
-</label>
+        <div id="quizStatus"
+             class="status"></div>
 
-<select id="quizCount">
+        <div id="quizArea"></div>
 
-<option value="5">
-5
-</option>
-
-<option value="10">
-10
-</option>
-
-<option value="15">
-15
-</option>
-
-<option value="20">
-20
-</option>
-
-</select>
-
-<button
-class="primary"
-onclick="generateQuiz()">
-
-Search for Practice Questions
-
-</button>
-
-</div>
-
-<div id="quizArea"></div>
-
-  </section>
-  <section id="notes"
-class="page">
-
-<div class="card">
-
-<h2>Study Notes</h2>
-
-<label>
-Note Title
-</label>
-
-<input
-id="noteTitle"
-type="text"
-placeholder="Example: Algebra formulas">
-
-<label>
-Note
-</label>
-
-<textarea
-id="noteText"
-placeholder="Write your study note here...">
-</textarea>
-
-<button
-class="primary"
-onclick="saveNote()">
-
-Save Note
-
-</button>
-
-</div>
-
-<div id="notesList"></div>
+    </div>
 
 </section>
 
 
-<section id="planner"
-class="page">
+<!-- CHAT HISTORY -->
 
-<div class="card">
+<section id="history"
+         class="page">
 
-<h2>Study Planner</h2>
+    <div class="card">
 
-<p class="muted">
-Create a simple study schedule.
-</p>
+        <h2>Last 10 Chats</h2>
 
-<label>
-Subject
-</label>
+        <p class="small">
+            Your ten most recent chats are saved
+            on this device for offline viewing.
+        </p>
 
-<select id="planSubject">
+        <div id="chatHistory"></div>
 
-<option value="">
-Select subject
-</option>
+        <button class="primary"
+                onclick="clearChats()">
+            Clear Saved Chats
+        </button>
 
-</select>
+    </div>
 
-<label>
-Date
-</label>
-
-<input
-id="planDate"
-type="date">
-
-<label>
-Time
-</label>
-
-<input
-id="planTime"
-type="time">
-
-<label>
-Topic
-</label>
-
-<input
-id="planTopic"
-type="text"
-placeholder="What will you study?">
-
-<button
-class="primary"
-onclick="makePlan()">
-
-Add Study Plan
-
-</button>
-
-</div>
-
-<div id="plannerList"></div>
-
-</section>
-
-
-<section id="progress"
-class="page">
-
-<div class="card">
-
-<h2>My Progress</h2>
-
-<div class="grid">
-
-<div class="stat">
-
-<strong id="progressQuizzes">
-0
-</strong>
-
-<span class="muted">
-Quizzes
-</span>
-
-</div>
-
-<div class="stat">
-
-<strong id="progressCorrect">
-0
-</strong>
-
-<span class="muted">
-Correct
-</span>
-
-</div>
-
-<div class="stat">
-
-<strong id="progressTotal">
-0
-</strong>
-
-<span class="muted">
-Total Questions
-</span>
-
-</div>
-
-<div class="stat">
-
-<strong id="progressAccuracy">
-0%
-</strong>
-
-<span class="muted">
-Accuracy
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>Study History</h3>
-
-<div id="historyList">
-
-<div class="empty muted">
-No study activity yet.
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<button
-class="secondary"
-onclick="resetProgress()">
-
-Reset Progress
-
-</button>
-
-</div>
-
-</section>
-
-
-</main>
-
+            </section>
+    </main>
 
 <script>
 
-/* =========================
-   SUBJECTS
-========================= */
-
-var subjects = [
-
-"English Language",
-"Mathematics",
-"Physics",
-"Chemistry",
-"Biology",
-"Further Mathematics",
-"Agricultural Science",
-"Economics",
-"Government",
-"Commerce",
-"Accounting",
-"Geography",
-"Literature in English",
-"Christian Religious Studies",
-"Islamic Religious Studies",
-"Civic Education",
-"Computer Studies",
-"Data Processing",
-"Technical Drawing",
-"Basic Electricity",
-"Basic Technology",
-"Building Construction",
-"Woodwork",
-"Metalwork",
-"Auto Mechanics",
-"Electronics",
-"Food and Nutrition",
-"Home Management",
-"Clothing and Textiles",
-"Visual Art",
-"Music",
-"French",
-"Yoruba",
-"Igbo",
-"Hausa",
-"Marketing",
-"Office Practice",
-"Insurance",
-"Animal Husbandry",
-"Fisheries",
-"Forestry",
-"Physical Education",
-"Health Education",
-"Photography"
-
-];
+const API_URL =
+    "https://eclectic-gaufre-e909ee.netlify.app/api/search";
 
 
 /* =========================
-   APP DATA
+   APP STATE
 ========================= */
 
-var appData = {
+let currentQuiz = [];
 
-quizzes:0,
+let selectedAnswers = [];
 
-correct:0,
-
-total:0,
-
-sessions:0,
-
-notes:[],
-
-plans:[],
-
-history:[]
-
-};
-
-
-var currentQuiz = [];
-
-var currentSubject = "";
-
-var quizStarted = false;
+let chatHistory =
+    JSON.parse(
+        localStorage.getItem("KRON_LAST_10_CHATS") || "[]"
+    );
 
 
 /* =========================
    PAGE NAVIGATION
 ========================= */
 
-function showPage(page){
+function showPage(pageId, button) {
 
-    var pages =
-        document.querySelectorAll(".page");
+    document
+        .querySelectorAll(".page")
+        .forEach(function(page) {
 
-    pages.forEach(function(item){
-
-        item.classList.remove("active");
-
-    });
-
-    var selected =
-        document.getElementById(page);
-
-    if(selected){
-
-        selected.classList.add("active");
-
-    }
-
-    window.scrollTo(0,0);
-
-}
-
-
-/* =========================
-   LOAD SUBJECTS
-========================= */
-
-function loadSubjects(){
-
-    var selects = [
-
-        document.getElementById("tutorSubject"),
-
-        document.getElementById("quizSubject"),
-
-        document.getElementById("planSubject")
-
-    ];
-
-    selects.forEach(function(select){
-
-        if(!select){
-            return;
-        }
-
-        subjects.forEach(function(subject){
-
-            var option =
-                document.createElement("option");
-
-            option.value = subject;
-
-            option.textContent = subject;
-
-            select.appendChild(option);
+            page.classList.remove("active");
 
         });
 
-    });
 
+    const page =
+        document.getElementById(pageId);
+
+    if (page) {
+        page.classList.add("active");
+    }
+
+
+    document
+        .querySelectorAll("nav button")
+        .forEach(function(btn) {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+
+    if (pageId === "history") {
+        renderChatHistory();
+    }
 }
 
 
 /* =========================
-   SECURITY HELPERS
+   SAFE HTML
 ========================= */
 
-function escapeHTML(value){
+function escapeHTML(value) {
 
-    return String(value)
-
-        .replace(/&/g,"&amp;")
-
-        .replace(/</g,"&lt;")
-
-        .replace(/>/g,"&gt;")
-
-        .replace(/"/g,"&quot;")
-
-        .replace(/'/g,"&#039;");
-
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
-function escapeAttribute(value){
-
-    return String(value)
-
-        .replace(/&/g,"&amp;")
-
-        .replace(/"/g,"&quot;")
-
-        .replace(/'/g,"&#039;")
-
-        .replace(/</g,"&lt;")
-
-        .replace(/>/g,"&gt;");
-
-}
-      
 /* =========================
-   AI TUTOR WEB SEARCH
+   SAVE LAST 10 CHATS
 ========================= */
 
-function askKRON(){
+function saveChat(type, question, answer) {
 
-    var subject =
-        document.getElementById("tutorSubject").value;
+    const item = {
 
-    var question =
-        document.getElementById("tutorQuestion").value.trim();
+        type: type,
 
-    var result =
-        document.getElementById("tutorResult");
+        question: question,
 
-    if(!subject || !question){
+        answer: answer,
 
-        result.innerHTML =
-            "<div class='card'>" +
-            "<span class='muted'>" +
-            "Please select a subject and enter a question." +
-            "</span>" +
-            "</div>";
+        time:
+            new Date().toLocaleString()
+
+    };
+
+
+    chatHistory.unshift(item);
+
+
+    chatHistory =
+        chatHistory.slice(0, 10);
+
+
+    localStorage.setItem(
+        "KRON_LAST_10_CHATS",
+        JSON.stringify(chatHistory)
+    );
+}
+
+
+/* =========================
+   RENDER CHAT HISTORY
+========================= */
+
+function renderChatHistory() {
+
+    const box =
+        document.getElementById("chatHistory");
+
+
+    if (!chatHistory.length) {
+
+        box.innerHTML =
+            '<p class="small">No saved chats yet.</p>';
 
         return;
     }
 
-    result.innerHTML =
-        "<div class='card'>" +
-        "<h3>Searching the Web...</h3>" +
-        "<p class='muted'>" +
-        "KRON is looking for reliable educational sources." +
-        "</p>" +
-        "</div>";
 
-    fetch("https://eclectic-gaufre-e909ee.netlify.app/api/search", {
+    box.innerHTML =
+        chatHistory
+            .map(function(chat) {
 
-        method:"POST",
+                return `
+                    <div class="chat-item">
 
-        headers:{
-            "Content-Type":"application/json"
-        },
+                        <strong>
+                            ${escapeHTML(chat.type)}
+                        </strong>
 
-        body:JSON.stringify({
+                        <div class="small">
+                            ${escapeHTML(chat.time)}
+                        </div>
 
-            subject:subject,
+                        <p>
+                            <strong>Question:</strong><br>
+                            ${escapeHTML(chat.question)}
+                        </p>
 
-            question:question
+                        <p>
+                            <strong>Answer:</strong><br>
+                            ${escapeHTML(chat.answer)}
+                        </p>
 
-        })
+                    </div>
+                `;
 
-    })
-
-    .then(function(response){
-
-        return response.json();
-
-    })
-
-    .then(function(data){
-
-        if(data.error){
-
-            result.innerHTML =
-                "<div class='card'>" +
-                "<span class='muted'>" +
-                escapeHTML(data.error) +
-                "</span>" +
-                "</div>";
-
-            return;
-        }
-
-        displayWebResults(data);
-
-    })
-
-    .catch(function(error){
-
-        result.innerHTML =
-            "<div class='card'>" +
-            "<span class='muted'>" +
-            "Could not connect to the web. Please try again." +
-            "</span>" +
-            "</div>";
-
-    });
-
+            })
+            .join("");
 }
 
 
 /* =========================
-   DISPLAY WEB RESULTS
+   CLEAR CHATS
 ========================= */
 
-function displayWebResults(data){
+function clearChats() {
 
-    var result =
-        document.getElementById("tutorResult");
-
-    var results =
-        data.results || [];
-
-    if(!results.length){
-
-        result.innerHTML =
-            "<div class='card'>" +
-            "<span class='muted'>" +
-            "No web results were found." +
-            "</span>" +
-            "</div>";
-
-        return;
-    }
-
-    var html =
-        "<div class='card'>" +
-
-        "<h3>Web Sources</h3>" +
-
-        "<p class='muted'>" +
-
-        "KRON found these sources for your question." +
-
-        "</p>";
-
-    results.forEach(function(item,index){
-
-        html +=
-
-            "<div class='card' " +
-            "style='margin-top:12px;'>" +
-
-            "<strong>" +
-
-            (index + 1) +
-
-            ". " +
-
-            escapeHTML(
-                item.title ||
-                "Educational source"
-            ) +
-
-            "</strong>" +
-
-            "<p>" +
-
-            escapeHTML(
-                item.snippet || ""
-            ) +
-
-            "</p>" +
-
-            "<a href='" +
-
-            escapeAttribute(
-                item.url || "#"
-            ) +
-
-            "' target='_blank' " +
-
-            "rel='noopener noreferrer'>" +
-
-            "Open source" +
-
-            "</a>" +
-
-            "</div>";
-
-    });
-
-    html += "</div>";
-
-    result.innerHTML = html;
-
-}
-
-
-/* =========================
-   WEB QUIZ SEARCH
-========================= */
-
-function generateQuiz(){
-
-    var subject =
-        document.getElementById("quizSubject").value;
-
-    var count =
-        parseInt(
-            document.getElementById("quizCount").value
+    const confirmClear =
+        confirm(
+            "Delete all saved chats?"
         );
 
-    var area =
-        document.getElementById("quizArea");
 
-    if(!subject){
-
-        area.innerHTML =
-            "<div class='card'>" +
-
-            "<span class='muted'>" +
-
-            "Please select a subject first." +
-
-            "</span>" +
-
-            "</div>";
-
+    if (!confirmClear) {
         return;
     }
 
-    currentSubject = subject;
 
-    area.innerHTML =
-        "<div class='card'>" +
+    chatHistory = [];
 
-        "<h3>Searching the Web...</h3>" +
 
-        "<p class='muted'>" +
+    localStorage.removeItem(
+        "KRON_LAST_10_CHATS"
+    );
 
-        "KRON is finding " +
 
-        count +
-
-        " " +
-
-        escapeHTML(subject) +
-
-        " practice questions." +
-
-        "</p>" +
-
-        "</div>";
-
-    fetch("https://eclectic-gaufre-e909ee.netlify.app/api/search", {
-
-        method:"POST",
-
-        headers:{
-
-            "Content-Type":
-            "application/json"
-
-        },
-
-        body:JSON.stringify({
-
-            subject:subject,
-
-            question:
-
-                "Find " +
-
-                count +
-
-                " WAEC practice questions for " +
-
-                subject +
-
-                " from reliable educational websites."
-
-        })
-
-    })
-
-    .then(function(response){
-
-        return response.json();
-
-    })
-
-    .then(function(data){
-
-        if(data.error){
-
-            area.innerHTML =
-                "<div class='card'>" +
-
-                "<span class='muted'>" +
-
-                escapeHTML(data.error) +
-
-                "</span>" +
-
-                "</div>";
-
-            return;
-        }
-
-        renderWebQuiz(data);
-
-    })
-
-    .catch(function(error){
-
-        area.innerHTML =
-            "<div class='card'>" +
-
-            "<span class='muted'>" +
-
-            "Could not connect to the web. " +
-
-            "Please try again." +
-
-            "</span>" +
-
-            "</div>";
-
-    });
-
+    renderChatHistory();
 }
 
 
 /* =========================
-   WEB QUIZ RESULTS
+   WAEC AI
 ========================= */
 
-function renderWebQuiz(data){
+async function askWAEC() {
 
-    var area =
-        document.getElementById("quizArea");
+    const subject =
+        document.getElementById(
+            "waecSubject"
+        ).value.trim();
 
-    var results =
-        data.results || [];
 
-    if(!results.length){
+    const question =
+        document.getElementById(
+            "waecQuestion"
+        ).value.trim();
 
-        area.innerHTML =
-            "<div class='card'>" +
 
-            "<span class='muted'>" +
+    const status =
+        document.getElementById(
+            "waecStatus"
+        );
 
-            "No web results were found. Try again." +
 
-            "</span>" +
+    const answerBox =
+        document.getElementById(
+            "waecAnswer"
+        );
 
-            "</div>";
+
+    if (!subject) {
+
+        status.textContent =
+            "Please select a subject.";
 
         return;
     }
 
-    var html =
-        "<div class='card'>" +
 
-        "<h3>Web Results</h3>" +
+    if (!question) {
 
-        "<p class='muted'>" +
-
-        "Study these sources for " +
-
-        escapeHTML(currentSubject) +
-
-        ".</p>";
-
-    results.forEach(function(item,index){
-
-        html +=
-
-            "<div class='card' " +
-
-            "style='margin-top:12px;'>" +
-
-            "<strong>" +
-
-            (index + 1) +
-
-            ". " +
-
-            escapeHTML(
-
-                item.title ||
-
-                "Study resource"
-
-            ) +
-
-            "</strong>" +
-
-            "<p>" +
-
-            escapeHTML(
-
-                item.snippet || ""
-
-            ) +
-
-            "</p>" +
-
-            "<a href='" +
-
-            escapeAttribute(
-
-                item.url || "#"
-
-            ) +
-
-            "' target='_blank' " +
-
-            "rel='noopener noreferrer'>" +
-
-            "Open source" +
-
-            "</a>" +
-
-            "</div>";
-
-    });
-
-    html += "</div>";
-
-    area.innerHTML = html;
-
-  }
-  /* =========================
-   QUIZ DISPLAY
-========================= */
-
-function renderQuiz(){
-
-    var area =
-        document.getElementById("quizArea");
-
-    if(!currentQuiz.length){
-
-        area.innerHTML =
-            "<div class='card'>" +
-            "<span class='muted'>" +
-            "No quiz questions available." +
-            "</span>" +
-            "</div>";
+        status.textContent =
+            "Please enter your question.";
 
         return;
     }
 
-    var html =
-        "<div class='card'>" +
 
-        "<h2>" +
-        escapeHTML(currentSubject) +
-        " Quiz" +
-        "</h2>" +
+    status.textContent =
+        "KRON is searching and thinking...";
 
-        "<p>" +
-        currentQuiz.length +
-        " questions" +
-        "</p>" +
 
-        "</div>";
+    answerBox.innerHTML = "";
 
-    currentQuiz.forEach(function(item,index){
 
-        html +=
+    try {
 
-            "<div class='card'>" +
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
 
-            "<h3>" +
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-            (index + 1) +
+                    body: JSON.stringify({
 
-            ". " +
+                        mode: "waec",
 
-            escapeHTML(item.question) +
+                        subject: subject,
 
-            "</h3>";
+                        question: question
 
-        item.options.forEach(function(option,optIndex){
+                    })
 
-            html +=
+                }
+            );
 
-                "<label " +
 
-                "style='display:block;" +
+        const data =
+            await response.json();
 
-                "padding:12px;" +
 
-                "margin-top:8px;" +
+        if (!response.ok) {
 
-                "background:#10182a;" +
+            throw new Error(
+                data.error ||
+                "Request failed."
+            );
+        }
 
-                "border:1px solid #263653;" +
 
-                "border-radius:10px;'>" +
+        const answer =
+            data.answer ||
+            "No answer was returned.";
 
-                "<input " +
 
-                "type='radio' " +
+        answerBox.innerHTML = `
+            <div class="answer">
+                ${escapeHTML(answer)}
+            </div>
+        `;
 
-                "name='question" +
 
-                index +
+        saveChat(
+            "WAEC AI - " + subject,
+            question,
+            answer
+        );
 
-                "' " +
 
-                "value='" +
+        status.textContent =
+            "Answer ready.";
 
-                optIndex +
 
-                "' " +
+    } catch (error) {
 
-                "style='width:auto;" +
+        status.textContent =
+            "Something went wrong: " +
+            error.message;
 
-                "margin-right:8px;'>" +
+    }
+}
+    function displayWebResults(results) {
 
-                escapeHTML(option) +
+    const box =
+        document.getElementById("webResults");
 
-                "</label>";
+
+    if (!results || !results.length) {
+
+        box.innerHTML =
+            '<p class="small">No web results found.</p>';
+
+        return;
+    }
+
+
+    box.innerHTML =
+        results
+            .map(function(item) {
+
+                return `
+                    <div class="result">
+
+                        <strong>
+                            ${escapeHTML(item.title)}
+                        </strong>
+
+                        <p>
+                            ${escapeHTML(item.snippet)}
+                        </p>
+
+                        ${
+                            item.url
+                                ? `
+                                <a
+                                    href="${escapeHTML(item.url)}"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    Open source
+                                </a>
+                                `
+                                : ""
+                        }
+
+                    </div>
+                `;
+
+            })
+            .join("");
+}
+
+
+/* =========================
+   GENERAL WEB SEARCH
+========================= */
+
+async function searchWeb() {
+
+    const question =
+        document.getElementById(
+            "webQuestion"
+        ).value.trim();
+
+
+    const status =
+        document.getElementById(
+            "webStatus"
+        );
+
+
+    const answerBox =
+        document.getElementById(
+            "webAnswer"
+        );
+
+
+    const resultsBox =
+        document.getElementById(
+            "webResults"
+        );
+
+
+    if (!question) {
+
+        status.textContent =
+            "Enter something to search.";
+
+        return;
+    }
+
+
+    status.textContent =
+        "Searching the web...";
+
+
+    answerBox.innerHTML = "";
+
+    resultsBox.innerHTML = "";
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        mode: "web",
+
+                        subject: "",
+
+                        question: question
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Web search failed."
+            );
+        }
+
+
+        const answer =
+            data.answer ||
+            "No answer was returned.";
+
+
+        answerBox.innerHTML = `
+            <div class="answer">
+                ${escapeHTML(answer)}
+            </div>
+        `;
+
+
+        displayWebResults(
+            data.results
+        );
+
+
+        saveChat(
+            "Web Search",
+            question,
+            answer
+        );
+
+
+        status.textContent =
+            "Search complete.";
+
+
+    } catch (error) {
+
+        status.textContent =
+            "Search failed: " +
+            error.message;
+
+    }
+}
+
+
+/* =========================
+   QUIZ GENERATOR
+========================= */
+
+async function generateQuiz() {
+
+    const subject =
+        document.getElementById(
+            "quizSubject"
+        ).value.trim();
+
+
+    const status =
+        document.getElementById(
+            "quizStatus"
+        );
+
+
+    const area =
+        document.getElementById(
+            "quizArea"
+        );
+
+
+    if (!subject) {
+
+        status.textContent =
+            "Please select a subject.";
+
+        return;
+    }
+
+
+    status.textContent =
+        "Creating your quiz...";
+
+
+    area.innerHTML = "";
+
+
+    currentQuiz = [];
+
+    selectedAnswers = [];
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        mode: "quiz",
+
+                        subject: subject,
+
+                        question:
+                            "Create 5 WAEC-style multiple-choice practice questions for " +
+                            subject +
+                            ". Cover different important topics."
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Quiz request failed."
+            );
+        }
+
+
+        if (
+            !data.quiz ||
+            !Array.isArray(
+                data.quiz.questions
+            )
+        ) {
+
+            throw new Error(
+                "Invalid quiz returned."
+            );
+        }
+
+
+        currentQuiz =
+            data.quiz.questions;
+
+
+        selectedAnswers =
+            new Array(
+                currentQuiz.length
+            ).fill(null);
+
+
+        renderQuiz();
+
+
+        status.textContent =
+            "Quiz ready.";
+
+    } catch (error) {
+
+        status.textContent =
+            "Quiz failed: " +
+            error.message;
+
+    }
+}
+
+
+/* =========================
+   RENDER QUIZ
+========================= */
+
+function renderQuiz() {
+
+    const area =
+        document.getElementById(
+            "quizArea"
+        );
+
+
+    if (!currentQuiz.length) {
+
+        area.innerHTML =
+            '<p class="small">No quiz questions available.</p>';
+
+        return;
+    }
+
+
+    area.innerHTML =
+        currentQuiz
+            .map(function(item, index) {
+
+                const options =
+                    Array.isArray(item.options)
+                        ? item.options
+                        : [];
+
+
+                return `
+                    <div class="quiz-question">
+
+                        <strong>
+                            ${index + 1}.
+                            ${escapeHTML(item.question)}
+                        </strong>
+
+                        <div>
+
+                            ${options
+                                .map(function(option, optionIndex) {
+
+                                    return `
+                                        <button
+                                            class="quiz-option"
+                                            onclick="selectAnswer(
+                                                ${index},
+                                                ${optionIndex},
+                                                this
+                                            )">
+
+                                            ${escapeHTML(option)}
+
+                                        </button>
+                                    `;
+
+                                })
+                                .join("")}
+
+                        </div>
+
+                    </div>
+                `;
+
+            })
+            .join("") +
+
+        `
+            <button
+                class="primary"
+                onclick="finishQuiz()">
+                Finish Quiz
+            </button>
+
+            <div id="quizScore"></div>
+        `;
+}
+
+
+/* =========================
+   SELECT ANSWER
+========================= */
+
+function selectAnswer(
+    questionIndex,
+    optionIndex,
+    button
+) {
+
+    selectedAnswers[
+        questionIndex
+    ] = optionIndex;
+
+
+    const questionBox =
+        button.closest(
+            ".quiz-question"
+        );
+
+
+    questionBox
+        .querySelectorAll(
+            ".quiz-option"
+        )
+        .forEach(function(btn) {
+
+            btn.classList.remove(
+                "selected"
+            );
 
         });
 
-        html += "</div>";
 
-    });
+    button.classList.add(
+        "selected"
+    );
+        }
+    function finishQuiz() {
 
-    html +=
-
-        "<button " +
-
-        "class='primary' " +
-
-        "onclick='finishQuiz()'>" +
-
-        "Finish Quiz" +
-
-        "</button>";
-
-    area.innerHTML = html;
-
-}
+    const scoreBox =
+        document.getElementById(
+            "quizScore"
+        );
 
 
-/* =========================
-   FINISH QUIZ
-========================= */
-
-function finishQuiz(){
-
-    if(!quizStarted || !currentQuiz.length){
+    if (!currentQuiz.length) {
 
         return;
     }
 
-    var score = 0;
 
-    var answered = 0;
+    let score = 0;
 
-    currentQuiz.forEach(function(item,index){
 
-        var selected =
+    currentQuiz.forEach(
+        function(item, index) {
 
-            document.querySelector(
+            const selected =
+                selectedAnswers[index];
 
-                "input[name='question" +
 
-                index +
+            const correct =
+                Number(item.answer);
 
-                "']:checked"
 
-            );
-
-        if(selected){
-
-            answered++;
-
-            if(
-
-                parseInt(selected.value) ===
-
-                item.answer
-
-            ){
+            if (
+                selected !== null &&
+                selected === correct
+            ) {
 
                 score++;
 
             }
 
         }
+    );
 
-    });
 
-    appData.quizzes++;
+    const total =
+        currentQuiz.length;
 
-    appData.correct += score;
 
-    appData.total += currentQuiz.length;
-
-    appData.sessions++;
-
-    appData.history.push({
-
-        type:"Quiz",
-
-        subject:currentSubject,
-
-        score:score,
-
-        total:currentQuiz.length,
-
-        date:new Date().toLocaleString()
-
-    });
-
-    saveData();
-
-    renderProgress();
-
-    renderHistory();
-
-    updateDashboard();
-
-    var area =
-        document.getElementById("quizArea");
-
-    var percentage =
-
+    const percentage =
         Math.round(
-
-            (score / currentQuiz.length) * 100
-
+            (score / total) * 100
         );
 
-    area.innerHTML =
 
-        "<div class='card'>" +
+    scoreBox.innerHTML = `
+        <div class="card">
 
-        "<h2>Quiz Complete</h2>" +
+            <div class="score">
+                ${score} / ${total}
+            </div>
 
-        "<p style='font-size:22px;" +
+            <p>
+                Score: ${percentage}%
+            </p>
 
-        "margin:15px 0;'>" +
+            <p class="small">
+                Review the explanations below
+                to learn from the questions.
+            </p>
 
-        score +
+        </div>
+    `;
 
-        " / " +
 
-        currentQuiz.length +
+    currentQuiz.forEach(
+        function(item, index) {
 
-        "</p>" +
+            const questionBox =
+                document
+                    .querySelectorAll(
+                        ".quiz-question"
+                    )[index];
 
-        "<p>" +
 
-        percentage +
+            if (!questionBox) {
+                return;
+            }
 
-        "% correct" +
 
-        "</p>" +
+            const explanation =
+                item.explanation ||
+                "No explanation provided.";
 
-        "<p style='margin-top:10px;'>" +
 
-        answered +
+            const selected =
+                selectedAnswers[index];
 
-        " questions answered." +
 
-        "</p>" +
+            const correct =
+                Number(item.answer);
 
-        "<button " +
 
-        "class='primary' " +
+            let resultText;
 
-        "style='margin-top:16px;' " +
 
-        "onclick='showPage(\"progress\")'>" +
+            if (
+                selected !== null &&
+                selected === correct
+            ) {
 
-        "View Progress" +
+                resultText =
+                    "Correct";
 
-        "</button>" +
+            } else {
 
-        "</div>";
+                resultText =
+                    "Incorrect";
 
-    quizStarted = false;
+            }
 
-}
 
-
-/* =========================
-   NOTES
-========================= */
-
-function saveNote(){
-
-    var title =
-
-        document.getElementById("noteTitle")
-        .value.trim();
-
-    var text =
-
-        document.getElementById("noteText")
-        .value.trim();
-
-    if(!title || !text){
-
-        alert(
-            "Please enter a title and note."
-        );
-
-        return;
-    }
-
-    appData.notes.push({
-
-        title:title,
-
-        text:text,
-
-        date:new Date().toLocaleString()
-
-    });
-
-    saveData();
-
-    document.getElementById(
-        "noteTitle"
-    ).value = "";
-
-    document.getElementById(
-        "noteText"
-    ).value = "";
-
-    renderNotes();
-
-    updateDashboard();
-
-}
-
-
-function renderNotes(){
-
-    var container =
-        document.getElementById("notesList");
-
-    if(!container){
-
-        return;
-    }
-
-    if(!appData.notes.length){
-
-        container.innerHTML =
-
-            "<div class='card'>" +
-
-            "<span class='muted'>" +
-
-            "No notes saved yet." +
-
-            "</span>" +
-
-            "</div>";
-
-        return;
-    }
-
-    var html = "";
-
-    appData.notes.forEach(
-        function(note,index){
-
-        html +=
-
-            "<div class='card'>" +
-
-            "<h3>" +
-
-            escapeHTML(note.title) +
-
-            "</h3>" +
-
-            "<p " +
-
-            "style='white-space:pre-wrap;" +
-
-            "margin-top:10px;'>" +
-
-            escapeHTML(note.text) +
-
-            "</p>" +
-
-            "<p class='muted' " +
-
-            "style='margin-top:12px;'>" +
-
-            escapeHTML(note.date) +
-
-            "</p>" +
-
-            "<button " +
-
-            "class='secondary' " +
-
-            "style='margin-top:12px;' " +
-
-            "onclick='deleteNote(" +
-
-            index +
-
-            ")'>" +
-
-            "Delete" +
-
-            "</button>" +
-
-            "</div>";
-
-    });
-
-    container.innerHTML = html;
-
-}
-
-
-function deleteNote(index){
-
-    if(!confirm(
-        "Delete this note?"
-    )){
-
-        return;
-    }
-
-    appData.notes.splice(index,1);
-
-    saveData();
-
-    renderNotes();
-
-    updateDashboard();
-
-}
-
-
-/* =========================
-   STUDY PLANNER
-========================= */
-
-function makePlan(){
-
-    var subject =
-        document.getElementById(
-            "planSubject"
-        ).value;
-
-    var date =
-        document.getElementById(
-            "planDate"
-        ).value;
-
-    var time =
-        document.getElementById(
-            "planTime"
-        ).value;
-
-    var topic =
-        document.getElementById(
-            "planTopic"
-        ).value.trim();
-
-    if(
-        !subject ||
-        !date ||
-        !time ||
-        !topic
-    ){
-
-        alert(
-            "Please complete all study plan fields."
-        );
-
-        return;
-    }
-
-    appData.plans.push({
-
-        subject:subject,
-
-        date:date,
-
-        time:time,
-
-        topic:topic
-
-    });
-
-    saveData();
-
-    document.getElementById(
-        "planDate"
-    ).value = "";
-
-    document.getElementById(
-        "planTime"
-    ).value = "";
-
-    document.getElementById(
-        "planTopic"
-    ).value = "";
-
-    renderPlans();
-
-  }
-  function renderPlans(){
-
-    var container =
-        document.getElementById("plannerList");
-
-    if(!container){
-
-        return;
-    }
-
-    if(!appData.plans.length){
-
-        container.innerHTML =
-
-            "<div class='card'>" +
-
-            "<span class='muted'>" +
-
-            "No study plans yet." +
-
-            "</span>" +
-
-            "</div>";
-
-        return;
-    }
-
-    var html = "";
-
-    appData.plans.forEach(
-        function(plan,index){
-
-        html +=
-
-            "<div class='card'>" +
-
-            "<h3>" +
-
-            escapeHTML(plan.subject) +
-
-            "</h3>" +
-
-            "<p>" +
-
-            escapeHTML(plan.topic) +
-
-            "</p>" +
-
-            "<p class='muted' " +
-
-            "style='margin-top:8px;'>" +
-
-            escapeHTML(plan.date) +
-
-            " at " +
-
-            escapeHTML(plan.time) +
-
-            "</p>" +
-
-            "<button " +
-
-            "class='secondary' " +
-
-            "style='margin-top:12px;' " +
-
-            "onclick='deletePlan(" +
-
-            index +
-
-            ")'>" +
-
-            "Delete Plan" +
-
-            "</button>" +
-
-            "</div>";
-
-    });
-
-    container.innerHTML = html;
-
-}
-
-
-function deletePlan(index){
-
-    if(!confirm(
-        "Delete this study plan?"
-    )){
-
-        return;
-    }
-
-    appData.plans.splice(index,1);
-
-    saveData();
-
-    renderPlans();
-
-}
-
-
-/* =========================
-   PROGRESS
-========================= */
-
-function renderProgress(){
-
-    var quizzes =
-        document.getElementById(
-            "progressQuizzes"
-        );
-
-    var correct =
-        document.getElementById(
-            "progressCorrect"
-        );
-
-    var total =
-        document.getElementById(
-            "progressTotal"
-        );
-
-    var accuracy =
-        document.getElementById(
-            "progressAccuracy"
-        );
-
-    if(quizzes){
-
-        quizzes.textContent =
-            appData.quizzes;
-
-    }
-
-    if(correct){
-
-        correct.textContent =
-            appData.correct;
-
-    }
-
-    if(total){
-
-        total.textContent =
-            appData.total;
-
-    }
-
-    if(accuracy){
-
-        var percent = 0;
-
-        if(appData.total > 0){
-
-            percent =
-
-                Math.round(
-
-                    (appData.correct /
-                    appData.total) * 100
-
+            const feedback =
+                document.createElement(
+                    "div"
                 );
 
-        }
 
-        accuracy.textContent =
-            percent + "%";
+            feedback.className =
+                "answer";
 
-    }
 
-}
+            feedback.innerHTML =
+                `
+                    <strong>
+                        ${resultText}
+                    </strong>
 
+                    <br><br>
 
-/* =========================
-   HISTORY
-========================= */
+                    ${escapeHTML(explanation)}
+                `;
 
-function renderHistory(){
 
-    var container =
-        document.getElementById(
-            "historyList"
-        );
-
-    if(!container){
-
-        return;
-    }
-
-    if(!appData.history.length){
-
-        container.innerHTML =
-
-            "<div class='empty muted'>" +
-
-            "No study activity yet." +
-
-            "</div>";
-
-        return;
-    }
-
-    var html = "";
-
-    appData.history
-        .slice()
-        .reverse()
-        .forEach(function(item){
-
-        html +=
-
-            "<div style='" +
-
-            "padding:13px 0;" +
-
-            "border-bottom:1px solid #202d49;" +
-
-            "'>" +
-
-            "<strong>" +
-
-            escapeHTML(item.type) +
-
-            "</strong><br>" +
-
-            "<span class='muted'>" +
-
-            escapeHTML(item.subject) +
-
-            "</span><br>" +
-
-            "<span class='muted'>" +
-
-            escapeHTML(item.score) +
-
-            "/" +
-
-            escapeHTML(item.total) +
-
-            " • " +
-
-            escapeHTML(item.date) +
-
-            "</span>" +
-
-            "</div>";
-
-    });
-
-    container.innerHTML = html;
-
-}
-
-
-/* =========================
-   DASHBOARD
-========================= */
-
-function updateDashboard(){
-
-    var quizzes =
-        document.getElementById(
-            "homeQuizzes"
-        );
-
-    var accuracy =
-        document.getElementById(
-            "homeAccuracy"
-        );
-
-    var notes =
-        document.getElementById(
-            "homeNotes"
-        );
-
-    var sessions =
-        document.getElementById(
-            "homeSessions"
-        );
-
-    if(quizzes){
-
-        quizzes.textContent =
-            appData.quizzes;
-
-    }
-
-    if(notes){
-
-        notes.textContent =
-            appData.notes.length;
-
-    }
-
-    if(sessions){
-
-        sessions.textContent =
-            appData.sessions;
-
-    }
-
-    if(accuracy){
-
-        var percent = 0;
-
-        if(appData.total > 0){
-
-            percent =
-
-                Math.round(
-
-                    (appData.correct /
-                    appData.total) * 100
-
-                );
-
-        }
-
-        accuracy.textContent =
-            percent + "%";
-
-    }
-
-}
-
-
-/* =========================
-   RESET PROGRESS
-========================= */
-
-function resetProgress(){
-
-    if(!confirm(
-        "Reset all quiz and study progress?"
-    )){
-
-        return;
-    }
-
-    appData.quizzes = 0;
-
-    appData.correct = 0;
-
-    appData.total = 0;
-
-    appData.sessions = 0;
-
-    appData.history = [];
-
-    saveData();
-
-    renderProgress();
-
-    renderHistory();
-
-    updateDashboard();
-
-}
-
-
-/* =========================
-   LOCAL STORAGE
-========================= */
-
-function saveData(){
-
-    try{
-
-        localStorage.setItem(
-
-            "KRON_APP_DATA",
-
-            JSON.stringify(appData)
-
-        );
-
-    }catch(error){
-
-        console.log(
-
-            "Could not save KRON data.",
-
-            error
-
-        );
-
-    }
-
-}
-
-
-function loadData(){
-
-    try{
-
-        var saved =
-
-            localStorage.getItem(
-                "KRON_APP_DATA"
+            questionBox.appendChild(
+                feedback
             );
 
-        if(!saved){
-
-            return;
         }
+    );
 
-        var data =
-            JSON.parse(saved);
 
-        if(!data){
-
-            return;
-        }
-
-        appData.quizzes =
-            Number(data.quizzes) || 0;
-
-        appData.correct =
-            Number(data.correct) || 0;
-
-        appData.total =
-            Number(data.total) || 0;
-
-        appData.sessions =
-            Number(data.sessions) || 0;
-
-        appData.notes =
-
-            Array.isArray(data.notes)
-
-            ? data.notes
-
-            : [];
-
-        appData.plans =
-
-            Array.isArray(data.plans)
-
-            ? data.plans
-
-            : [];
-
-        appData.history =
-
-            Array.isArray(data.history)
-
-            ? data.history
-
-            : [];
-
-    }catch(error){
-
-        console.log(
-
-            "Could not load KRON data.",
-
-            error
-
-        );
-
-    }
+    saveChat(
+        "WAEC Quiz",
+        "Completed " +
+        total +
+        " questions",
+        "Score: " +
+        score +
+        "/" +
+        total +
+        " (" +
+        percentage +
+        "%)"
+    );
 
 }
 
 
 /* =========================
-   START KRON
+   INITIAL LOAD
 ========================= */
 
-loadData();
-
-loadSubjects();
-
-renderNotes();
-
-renderPlans();
-
-renderProgress();
-
-renderHistory();
-
-updateDashboard();
+renderChatHistory();
 
 </script>
 
 </body>
-
 </html>
+            
