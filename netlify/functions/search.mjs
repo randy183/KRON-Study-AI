@@ -43,9 +43,7 @@ export default async (req) => {
             );
         }
 
-        // =========================
         // SAFETY FILTER
-        // =========================
 
         const blockedWords = [
             "porn",
@@ -88,25 +86,18 @@ export default async (req) => {
             );
         }
 
-        // =========================
         // SEARCH QUERY
-        // =========================
 
         let searchQuery = question;
 
         if (mode === "waec") {
-
             searchQuery =
                 "WAEC Nigeria " +
                 subject +
                 " " +
                 question;
-
-        }
-
-        // =========================
-        // FREE SERP SEARCH
-        // =========================
+                    }
+                // FREE SEARCH
 
         const searchUrl =
             "https://freeserp.ai/api.php" +
@@ -115,17 +106,61 @@ export default async (req) => {
             encodeURIComponent(searchQuery) +
             "&size=8";
 
-        const searchResponse =
-            await fetch(searchUrl);
+        let results = [];
 
-        if (!searchResponse.ok) {
+        try {
+
+            const searchResponse =
+                await fetch(searchUrl);
+
+            if (searchResponse.ok) {
+
+                const searchData =
+                    await searchResponse.json();
+
+                const rawResults =
+                    searchData.results ||
+                    searchData.web ||
+                    [];
+
+                results =
+                    rawResults.map(item => ({
+                        title:
+                            item.title || "",
+
+                        snippet:
+                            item.snippet ||
+                            item.description ||
+                            "",
+
+                        url:
+                            item.url || ""
+                    }));
+            }
+
+        } catch (searchError) {
+
+            results = [];
+        }
+
+        // OPENROUTER KEY
+
+        const apiKey =
+            process.env.OPENROUTER_API_KEY;
+
+        if (!apiKey) {
+
             return new Response(
                 JSON.stringify({
                     error:
-                        "Web search failed."
+                        "OPENROUTER_API_KEY is not available to the deployed Netlify function.",
+
+                    hint:
+                        "Check the Netlify environment variable and redeploy the site."
                 }),
                 {
-                    status: 502,
+                    status: 500,
+
                     headers: {
                         "Content-Type":
                             "application/json"
@@ -134,53 +169,7 @@ export default async (req) => {
             );
         }
 
-        const searchData =
-            await searchResponse.json();
-
-        const rawResults =
-            searchData.results ||
-            searchData.web ||
-            [];
-
-        const results =
-            rawResults.map(item => ({
-                title:
-                    item.title || "",
-
-                snippet:
-                    item.snippet ||
-                    item.description ||
-                    "",
-
-                url:
-                    item.url || ""
-            }));
-
-        // =========================
-        // OPENROUTER KEY
-        // =========================
-
-        const apiKey =
-            process.env.OPENROUTER_API_KEY;
-
-        if (!apiKey) {
-            return new Response(
-                JSON.stringify({
-                    error:
-                        "OpenRouter API key is missing."
-                }),
-                {
-                    status: 500,
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    }
-                }
-            );
-    }
-                // =========================
-        // PREPARE SEARCH RESULTS
-        // =========================
+        // SEARCH RESULTS
 
         const sourceText =
             results
@@ -199,14 +188,9 @@ export default async (req) => {
 
                 })
                 .join("\n\n");
-
-
-        // =========================
-        // AI INSTRUCTIONS
-        // =========================
+                // AI INSTRUCTIONS
 
         let systemPrompt = "";
-
 
         if (mode === "web") {
 
@@ -214,15 +198,12 @@ export default async (req) => {
                 "You are KRON General Web Search. " +
                 "Answer the user's general question using the supplied web results. " +
                 "This is a separate general web search and is NOT a WAEC search. " +
-                "Find the results that actually relate to the exact question. " +
+                "Use only relevant results. " +
                 "Ignore unrelated results. " +
-                "Combine useful information into one clear answer. " +
-                "For current events, prefer recent and reliable information. " +
                 "Do not invent facts. " +
-                "If the search results are insufficient, say so clearly.";
+                "If the results are insufficient, say so clearly.";
 
         }
-
 
         else if (mode === "quiz") {
 
@@ -230,14 +211,12 @@ export default async (req) => {
                 "You are KRON Quiz Generator. " +
                 "Create a WAEC-style multiple-choice quiz for the requested subject. " +
                 "Use the web results as supporting research. " +
-                "Do not use unrelated search results. " +
                 "Create clear questions suitable for Nigerian secondary-school students. " +
-                "Return ONLY valid JSON using this structure: " +
+                "Return ONLY valid JSON in exactly this structure: " +
                 "{\"questions\":[{\"question\":\"...\",\"options\":[\"A\",\"B\",\"C\",\"D\"],\"answer\":0,\"explanation\":\"...\"}]} " +
                 "The answer must be the zero-based number of the correct option.";
 
         }
-
 
         else {
 
@@ -247,17 +226,12 @@ export default async (req) => {
                 "Use the supplied web results as supporting research. " +
                 "Focus on the exact question and subject. " +
                 "Ignore unrelated search results. " +
-                "Explain the answer clearly and simply. " +
+                "Explain clearly and simply. " +
                 "For mathematics and calculations, solve the exact problem yourself. " +
-                "Do not copy an unrelated search result. " +
                 "Do not invent information.";
-
         }
 
-
-        // =========================
-        // ASK OPENROUTER
-        // =========================
+        // OPENROUTER REQUEST
 
         const aiResponse =
             await fetch(
@@ -270,7 +244,13 @@ export default async (req) => {
                             "Bearer " + apiKey,
 
                         "Content-Type":
-                            "application/json"
+                            "application/json",
+
+                        "HTTP-Referer":
+                            "https://kron-study.netlify.app",
+
+                        "X-Title":
+                            "KRON Study"
                     },
 
                     body: JSON.stringify({
@@ -306,11 +286,7 @@ export default async (req) => {
                     })
                 }
             );
-
-
-        // =========================
-        // CHECK AI RESPONSE
-        // =========================
+                // CHECK OPENROUTER RESPONSE
 
         if (!aiResponse.ok) {
 
@@ -319,13 +295,14 @@ export default async (req) => {
 
             return new Response(
                 JSON.stringify({
-
                     error:
                         "OpenRouter request failed.",
 
+                    status:
+                        aiResponse.status,
+
                     details:
                         errorText
-
                 }),
                 {
                     status: 502,
@@ -338,17 +315,35 @@ export default async (req) => {
             );
         }
 
-
         const aiData =
             await aiResponse.json();
-
 
         let answer =
             aiData.choices?.[0]?.message?.content ||
             "";
-                // =========================
+
+        if (!answer) {
+
+            return new Response(
+                JSON.stringify({
+                    error:
+                        "OpenRouter returned an empty answer.",
+
+                    details:
+                        JSON.stringify(aiData)
+                }),
+                {
+                    status: 502,
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    }
+                }
+            );
+        }
+
         // QUIZ RESPONSE
-        // =========================
 
         if (mode === "quiz") {
 
@@ -365,13 +360,9 @@ export default async (req) => {
 
                 return new Response(
                     JSON.stringify({
-
                         mode: "quiz",
-
                         quiz: quiz,
-
                         results: results
-
                     }),
                     {
                         status: 200,
@@ -387,13 +378,11 @@ export default async (req) => {
 
                 return new Response(
                     JSON.stringify({
-
                         error:
                             "KRON could not create the quiz.",
 
                         details:
                             error.message
-
                     }),
                     {
                         status: 502,
@@ -407,24 +396,15 @@ export default async (req) => {
             }
         }
 
-
-        // =========================
         // NORMAL ANSWER
-        // =========================
 
         return new Response(
             JSON.stringify({
-
                 mode: mode,
-
                 subject: subject,
-
                 question: question,
-
                 answer: answer,
-
                 results: results
-
             }),
             {
                 status: 200,
@@ -436,18 +416,15 @@ export default async (req) => {
             }
         );
 
-
     } catch (error) {
 
         return new Response(
             JSON.stringify({
-
                 error:
                     "Something went wrong.",
 
                 details:
                     error.message
-
             }),
             {
                 status: 500,
@@ -462,9 +439,7 @@ export default async (req) => {
 };
 
 
-// =========================
 // NETLIFY FUNCTION PATH
-// =========================
 
 export const config = {
     path: "/api/search"
