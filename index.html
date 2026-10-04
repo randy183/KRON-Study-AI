@@ -1,1217 +1,1683 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<meta name="theme-color"
-      content="#0b0b0b">
+    <meta
+        name="theme-color"
+        content="#2563eb"
+    >
 
-<title>KRON Study AI</title>
+    <title>KRON Study AI</title>
 
-<style>
+    <style>
 
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background: #0b0b0b;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-}
-
-header {
-    background: #111111;
-    padding: 18px;
-    text-align: center;
-    border-bottom: 1px solid #292929;
-}
-
-header h1 {
-    margin: 0;
-    color: #ff2222;
-    font-size: 28px;
-}
-
-header p {
-    margin: 6px 0 0;
-    color: #aaaaaa;
-}
-
-nav {
-    display: flex;
-    overflow-x: auto;
-    gap: 8px;
-    padding: 10px;
-    background: #101010;
-    border-bottom: 1px solid #292929;
-}
-
-nav button {
-    flex: 0 0 auto;
-    background: #1b1b1b;
-    color: white;
-    border: 1px solid #333333;
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 14px;
-}
-
-nav button.active {
-    background: #b40000;
-    border-color: #ff2222;
-}
-
-main {
-    padding: 15px;
-    max-width: 850px;
-    margin: auto;
-}
-
-.page {
-    display: none;
-}
-
-.page.active {
-    display: block;
-}
-
-.card {
-    background: #141414;
-    border: 1px solid #292929;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 15px;
-}
-
-.card h2 {
-    margin-top: 0;
-    color: #ff3333;
-}
-
-textarea,
-input,
-select {
-    width: 100%;
-    background: #0d0d0d;
-    color: white;
-    border: 1px solid #333333;
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 8px;
-    font-size: 15px;
-}
-
-textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-button.primary {
-    width: 100%;
-    background: #c00000;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 13px;
-    margin-top: 10px;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-button.primary:active {
-    background: #8f0000;
-}
-
-.answer {
-    background: #101010;
-    border-left: 3px solid #ff2222;
-    padding: 14px;
-    margin-top: 15px;
-    border-radius: 6px;
-    line-height: 1.6;
-    white-space: pre-wrap;
-}
-
-.result {
-    background: #101010;
-    border: 1px solid #292929;
-    padding: 12px;
-    border-radius: 8px;
-    margin-top: 10px;
-}
-
-.result a {
-    color: #ff5555;
-    word-break: break-word;
-}
-
-.status {
-    color: #999999;
-    margin-top: 10px;
-}
-
-.ad-banner {
-    width: 100%;
-    min-height: 60px;
-    background: #151515;
-    border: 1px dashed #444444;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666666;
-    margin: 15px 0;
-    font-size: 12px;
-}
-
-.chat-item {
-    background: #101010;
-    border: 1px solid #292929;
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 10px;
-}
-
-.quiz-question {
-    background: #101010;
-    border: 1px solid #292929;
-    border-radius: 10px;
-    padding: 15px;
-    margin-top: 15px;
-}
-
-.quiz-option {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: #181818;
-    color: white;
-    border: 1px solid #333333;
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 8px;
-}
-
-.quiz-option.selected {
-    border-color: #ff2222;
-    background: #280000;
-}
-
-.score {
-    font-size: 22px;
-    color: #ff3333;
-    font-weight: bold;
-}
-
-.small {
-    font-size: 13px;
-    color: #999999;
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-    <h1>KRON</h1>
-    <p>Study AI</p>
-</header>
-
-<nav>
-
-    <button class="active"
-            onclick="showPage('home', this)">
-        Home
-    </button>
-
-    <button onclick="showPage('waec', this)">
-        WAEC AI
-    </button>
-
-    <button onclick="showPage('web', this)">
-        Web Search
-    </button>
-
-    <button onclick="showPage('quiz', this)">
-        Quiz
-    </button>
-
-    <button onclick="showPage('history', this)">
-        Chats
-    </button>
-
-</nav>
-
-<main>
-
-<!-- HOME -->
-
-<section id="home"
-         class="page active">
-
-    <div class="card">
-
-        <h2>Welcome to KRON</h2>
-
-        <p>
-            Your study assistant for WAEC subjects
-            and general information.
-        </p>
-
-        <p class="small">
-            Choose WAEC AI for school questions or
-            Web Search for general current information.
-        </p>
-
-    </div>
-
-    <div class="ad-banner">
-        Banner Ad Space
-    </div>
-
-</section>
-
-
-<!-- WAEC AI -->
-
-<section id="waec"
-         class="page">
-
-    <div class="card">
-
-        <h2>WAEC AI</h2>
-
-        <p class="small">
-            Ask a question about your selected WAEC subject.
-        </p>
-
-        <select id="waecSubject">
-
-            <option value="">
-                Select subject
-            </option>
-
-            <option>English Language</option>
-            <option>Mathematics</option>
-            <option>Physics</option>
-            <option>Chemistry</option>
-            <option>Biology</option>
-            <option>Economics</option>
-            <option>Government</option>
-            <option>Commerce</option>
-            <option>Accounting</option>
-            <option>Marketing</option>
-            <option>Geography</option>
-            <option>Literature in English</option>
-            <option>Computer Studies</option>
-            <option>Data Processing</option>
-            <option>Office Practice</option>
-            <option>Christian Religious Studies</option>
-            <option>Islamic Religious Studies</option>
-            <option>Agricultural Science</option>
-            <option>Civic Education</option>
-            <option>Further Mathematics</option>
-            <option>Technical Drawing</option>
-            <option>Food and Nutrition</option>
-            <option>Other WAEC Subject</option>
-
-        </select>
-
-        <textarea
-            id="waecQuestion"
-            placeholder="Ask your WAEC question..."></textarea>
-
-        <button class="primary"
-                onclick="askWAEC()">
-            Ask KRON
-        </button>
-
-        <div id="waecStatus"
-             class="status"></div>
-
-        <div id="waecAnswer"></div>
-
-    </div>
-
-</section>
-
-
-<!-- GENERAL WEB SEARCH -->
-
-<section id="web"
-         class="page">
-
-    <div class="card">
-
-        <h2>Web Search</h2>
-
-        <p class="small">
-            Search the web for general information,
-            news and current events.
-        </p>
-
-        <input
-            id="webQuestion"
-            placeholder="Example: What is happening in Nigeria?">
-
-        <button class="primary"
-                onclick="searchWeb()">
-            Search Web
-        </button>
-
-        <div id="webStatus"
-             class="status"></div>
-
-        <div id="webAnswer"></div>
-
-        <div id="webResults"></div>
-
-    </div>
-
-</section>
-
-
-<!-- QUIZ -->
-
-<section id="quiz"
-         class="page">
-
-    <div class="card">
-
-        <h2>WAEC Quiz</h2>
-
-        <select id="quizSubject">
-
-            <option value="">
-                Select subject
-            </option>
-
-            <option>English Language</option>
-            <option>Mathematics</option>
-            <option>Physics</option>
-            <option>Chemistry</option>
-            <option>Biology</option>
-            <option>Economics</option>
-            <option>Government</option>
-            <option>Commerce</option>
-            <option>Accounting</option>
-            <option>Marketing</option>
-            <option>Geography</option>
-            <option>Literature in English</option>
-            <option>Computer Studies</option>
-            <option>Data Processing</option>
-            <option>Office Practice</option>
-            <option>Agricultural Science</option>
-            <option>Civic Education</option>
-            <option>Further Mathematics</option>
-
-        </select>
-
-        <button class="primary"
-                onclick="generateQuiz()">
-            Start Quiz
-        </button>
-
-        <div id="quizStatus"
-             class="status"></div>
-
-        <div id="quizArea"></div>
-
-    </div>
-
-</section>
-
-
-<!-- CHAT HISTORY -->
-
-<section id="history"
-         class="page">
-
-    <div class="card">
-
-        <h2>Last 10 Chats</h2>
-
-        <p class="small">
-            Your ten most recent chats are saved
-            on this device for offline viewing.
-        </p>
-
-        <div id="chatHistory"></div>
-
-        <button class="primary"
-                onclick="clearChats()">
-            Clear Saved Chats
-        </button>
-
-    </div>
-
-            </section>
-    </main>
-
-<script>
-
-const API_URL =
-    "https://eclectic-gaufre-e909ee.netlify.app/api/search";
-
-
-/* =========================
-   APP STATE
-========================= */
-
-let currentQuiz = [];
-
-let selectedAnswers = [];
-
-let chatHistory =
-    JSON.parse(
-        localStorage.getItem("KRON_LAST_10_CHATS") || "[]"
-    );
-
-
-/* =========================
-   PAGE NAVIGATION
-========================= */
-
-function showPage(pageId, button) {
-
-    document
-        .querySelectorAll(".page")
-        .forEach(function(page) {
-
-            page.classList.remove("active");
-
-        });
-
-
-    const page =
-        document.getElementById(pageId);
-
-    if (page) {
-        page.classList.add("active");
-    }
-
-
-    document
-        .querySelectorAll("nav button")
-        .forEach(function(btn) {
-
-            btn.classList.remove("active");
-
-        });
-
-
-    if (button) {
-        button.classList.add("active");
-    }
-
-
-    if (pageId === "history") {
-        renderChatHistory();
-    }
-}
-
-
-/* =========================
-   SAFE HTML
-========================= */
-
-function escapeHTML(value) {
-
-    return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-
-/* =========================
-   SAVE LAST 10 CHATS
-========================= */
-
-function saveChat(type, question, answer) {
-
-    const item = {
-
-        type: type,
-
-        question: question,
-
-        answer: answer,
-
-        time:
-            new Date().toLocaleString()
-
-    };
-
-
-    chatHistory.unshift(item);
-
-
-    chatHistory =
-        chatHistory.slice(0, 10);
-
-
-    localStorage.setItem(
-        "KRON_LAST_10_CHATS",
-        JSON.stringify(chatHistory)
-    );
-}
-
-
-/* =========================
-   RENDER CHAT HISTORY
-========================= */
-
-function renderChatHistory() {
-
-    const box =
-        document.getElementById("chatHistory");
-
-
-    if (!chatHistory.length) {
-
-        box.innerHTML =
-            '<p class="small">No saved chats yet.</p>';
-
-        return;
-    }
-
-
-    box.innerHTML =
-        chatHistory
-            .map(function(chat) {
-
-                return `
-                    <div class="chat-item">
-
-                        <strong>
-                            ${escapeHTML(chat.type)}
-                        </strong>
-
-                        <div class="small">
-                            ${escapeHTML(chat.time)}
-                        </div>
-
-                        <p>
-                            <strong>Question:</strong><br>
-                            ${escapeHTML(chat.question)}
-                        </p>
-
-                        <p>
-                            <strong>Answer:</strong><br>
-                            ${escapeHTML(chat.answer)}
-                        </p>
-
-                    </div>
-                `;
-
-            })
-            .join("");
-}
-
-
-/* =========================
-   CLEAR CHATS
-========================= */
-
-function clearChats() {
-
-    const confirmClear =
-        confirm(
-            "Delete all saved chats?"
-        );
-
-
-    if (!confirmClear) {
-        return;
-    }
-
-
-    chatHistory = [];
-
-
-    localStorage.removeItem(
-        "KRON_LAST_10_CHATS"
-    );
-
-
-    renderChatHistory();
-}
-
-
-/* =========================
-   WAEC AI
-========================= */
-
-async function askWAEC() {
-
-    const subject =
-        document.getElementById(
-            "waecSubject"
-        ).value.trim();
-
-
-    const question =
-        document.getElementById(
-            "waecQuestion"
-        ).value.trim();
-
-
-    const status =
-        document.getElementById(
-            "waecStatus"
-        );
-
-
-    const answerBox =
-        document.getElementById(
-            "waecAnswer"
-        );
-
-
-    if (!subject) {
-
-        status.textContent =
-            "Please select a subject.";
-
-        return;
-    }
-
-
-    if (!question) {
-
-        status.textContent =
-            "Please enter your question.";
-
-        return;
-    }
-
-
-    status.textContent =
-        "KRON is searching and thinking...";
-
-
-    answerBox.innerHTML = "";
-
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        mode: "waec",
-
-                        subject: subject,
-
-                        question: question
-
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error ||
-                "Request failed."
-            );
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
 
-        const answer =
-            data.answer ||
-            "No answer was returned.";
-
-
-        answerBox.innerHTML = `
-            <div class="answer">
-                ${escapeHTML(answer)}
-            </div>
-        `;
-
-
-        saveChat(
-            "WAEC AI - " + subject,
-            question,
-            answer
-        );
-
-
-        status.textContent =
-            "Answer ready.";
-
-
-    } catch (error) {
-
-        status.textContent =
-            "Something went wrong: " +
-            error.message;
-
-    }
-}
-    function displayWebResults(results) {
-
-    const box =
-        document.getElementById("webResults");
-
-
-    if (!results || !results.length) {
-
-        box.innerHTML =
-            '<p class="small">No web results found.</p>';
-
-        return;
-    }
-
-
-    box.innerHTML =
-        results
-            .map(function(item) {
-
-                return `
-                    <div class="result">
-
-                        <strong>
-                            ${escapeHTML(item.title)}
-                        </strong>
-
-                        <p>
-                            ${escapeHTML(item.snippet)}
-                        </p>
-
-                        ${
-                            item.url
-                                ? `
-                                <a
-                                    href="${escapeHTML(item.url)}"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    Open source
-                                </a>
-                                `
-                                : ""
-                        }
-
-                    </div>
-                `;
-
-            })
-            .join("");
-}
-
-
-/* =========================
-   GENERAL WEB SEARCH
-========================= */
-
-async function searchWeb() {
-
-    const question =
-        document.getElementById(
-            "webQuestion"
-        ).value.trim();
-
-
-    const status =
-        document.getElementById(
-            "webStatus"
-        );
-
-
-    const answerBox =
-        document.getElementById(
-            "webAnswer"
-        );
-
-
-    const resultsBox =
-        document.getElementById(
-            "webResults"
-        );
-
-
-    if (!question) {
-
-        status.textContent =
-            "Enter something to search.";
-
-        return;
-    }
-
-
-    status.textContent =
-        "Searching the web...";
-
-
-    answerBox.innerHTML = "";
-
-    resultsBox.innerHTML = "";
-
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        mode: "web",
-
-                        subject: "",
-
-                        question: question
-
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error ||
-                "Web search failed."
-            );
+            background: #f4f7fb;
+            color: #172033;
+            min-height: 100vh;
         }
 
-
-        const answer =
-            data.answer ||
-            "No answer was returned.";
-
-
-        answerBox.innerHTML = `
-            <div class="answer">
-                ${escapeHTML(answer)}
-            </div>
-        `;
-
-
-        displayWebResults(
-            data.results
-        );
-
-
-        saveChat(
-            "Web Search",
-            question,
-            answer
-        );
-
-
-        status.textContent =
-            "Search complete.";
-
-
-    } catch (error) {
-
-        status.textContent =
-            "Search failed: " +
-            error.message;
-
-    }
-}
-
-
-/* =========================
-   QUIZ GENERATOR
-========================= */
-
-async function generateQuiz() {
-
-    const subject =
-        document.getElementById(
-            "quizSubject"
-        ).value.trim();
-
-
-    const status =
-        document.getElementById(
-            "quizStatus"
-        );
-
-
-    const area =
-        document.getElementById(
-            "quizArea"
-        );
-
-
-    if (!subject) {
-
-        status.textContent =
-            "Please select a subject.";
-
-        return;
-    }
-
-
-    status.textContent =
-        "Creating your quiz...";
-
-
-    area.innerHTML = "";
-
-
-    currentQuiz = [];
-
-    selectedAnswers = [];
-
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        mode: "quiz",
-
-                        subject: subject,
-
-                        question:
-                            "Create 5 WAEC-style multiple-choice practice questions for " +
-                            subject +
-                            ". Cover different important topics."
-
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.error ||
-                "Quiz request failed."
-            );
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
         }
 
-
-        if (
-            !data.quiz ||
-            !Array.isArray(
-                data.quiz.questions
-            )
-        ) {
-
-            throw new Error(
-                "Invalid quiz returned."
-            );
+        button {
+            cursor: pointer;
         }
 
+        /* =========================
+           HEADER
+        ========================= */
 
-        currentQuiz =
-            data.quiz.questions;
+        header {
+            background: #2563eb;
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow:
+                0 4px 15px rgba(37, 99, 235, 0.18);
+        }
+
+        .header-inner {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            opacity: 0.85;
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        nav {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+
+            display: flex;
+            gap: 8px;
+
+            overflow-x: auto;
+            padding-top: 15px;
+
+            scrollbar-width: none;
+        }
+
+        nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        nav button {
+            border: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+
+            padding: 10px 15px;
+            border-radius: 10px;
+
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+
+        nav button:hover,
+        nav button.active {
+            background: white;
+            color: #2563eb;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        main {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+
+            padding: 30px 20px 60px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #3b82f6
+                );
+
+            color: white;
+
+            border-radius: 22px;
+            padding: 40px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 12px 30px rgba(37,99,235,0.18);
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 750px;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(240px, 1fr));
+
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+
+            border-radius: 18px;
+            padding: 24px;
+
+            box-shadow:
+                0 5px 20px rgba(15,23,42,0.07);
+
+            border: 1px solid #e7edf7;
+        }
+
+        .card h2,
+        .card h3 {
+            margin-bottom: 10px;
+            color: #172033;
+        }
+
+        .card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           SECTION TITLE
+        ========================= */
+
+        .section-title {
+            margin-bottom: 20px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+            margin-bottom: 7px;
+        }
+
+        .section-title p {
+            color: #64748b;
+        }
+
+        /* =========================
+           FORM ELEMENTS
+        ========================= */
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+
+            border: 1px solid #dbe3ef;
+            border-radius: 12px;
+
+            padding: 14px;
+
+            background: white;
+            color: #172033;
+
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .primary {
+            background: #2563eb;
+            color: white;
+
+            border: none;
+            border-radius: 12px;
+
+            padding: 13px 20px;
+
+            font-weight: 700;
+            margin-top: 15px;
+        }
+
+        .primary:hover {
+            background: #1d4ed8;
+        }
+
+        .secondary {
+            background: #eaf1ff;
+            color: #2563eb;
+
+            border: none;
+            border-radius: 12px;
+
+            padding: 12px 18px;
+
+            font-weight: 700;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            header {
+                padding: 16px;
+            }
+
+            .header-inner {
+                display: block;
+            }
+
+            .logo {
+                margin-bottom
+                      <!-- WAEC AI -->
+
+    <section
+        id="waec"
+        class="page">
+
+        <div class="section-title">
+
+            <h2>WAEC AI</h2>
+
+            <p>
+                Ask KRON questions about your school
+                subjects and get help understanding them.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <label for="waecSubject">
+                Subject
+            </label>
+
+            <select id="waecSubject">
+
+                <option>English Language</option>
+                <option>Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Biology</option>
+                <option>Economics</option>
+                <option>Government</option>
+                <option>Commerce</option>
+                <option>Marketing</option>
+                <option>Financial Accounting</option>
+                <option>Office Practice</option>
+                <option>Data Processing</option>
+                <option>Literature in English</option>
+                <option>Geography</option>
+                <option>Christian Religious Studies</option>
+                <option>Agricultural Science</option>
+
+            </select>
 
 
-        selectedAnswers =
-            new Array(
-                currentQuiz.length
-            ).fill(null);
+            <br><br>
+
+            <label for="waecQuestion">
+                Your Question
+            </label>
+
+            <textarea
+                id="waecQuestion"
+                placeholder="Example: Explain photosynthesis in a simple way.">
+            </textarea>
 
 
-        renderQuiz();
-
-
-        status.textContent =
-            "Quiz ready.";
-
-    } catch (error) {
-
-        status.textContent =
-            "Quiz failed: " +
-            error.message;
-
-    }
-}
-
-
-/* =========================
-   RENDER QUIZ
-========================= */
-
-function renderQuiz() {
-
-    const area =
-        document.getElementById(
-            "quizArea"
-        );
-
-
-    if (!currentQuiz.length) {
-
-        area.innerHTML =
-            '<p class="small">No quiz questions available.</p>';
-
-        return;
-    }
-
-
-    area.innerHTML =
-        currentQuiz
-            .map(function(item, index) {
-
-                const options =
-                    Array.isArray(item.options)
-                        ? item.options
-                        : [];
-
-
-                return `
-                    <div class="quiz-question">
-
-                        <strong>
-                            ${index + 1}.
-                            ${escapeHTML(item.question)}
-                        </strong>
-
-                        <div>
-
-                            ${options
-                                .map(function(option, optionIndex) {
-
-                                    return `
-                                        <button
-                                            class="quiz-option"
-                                            onclick="selectAnswer(
-                                                ${index},
-                                                ${optionIndex},
-                                                this
-                                            )">
-
-                                            ${escapeHTML(option)}
-
-                                        </button>
-                                    `;
-
-                                })
-                                .join("")}
-
-                        </div>
-
-                    </div>
-                `;
-
-            })
-            .join("") +
-
-        `
             <button
                 class="primary"
-                onclick="finishQuiz()">
-                Finish Quiz
+                onclick="askWAEC()">
+
+                Ask KRON AI
+
             </button>
 
-            <div id="quizScore"></div>
-        `;
-}
+
+            <div
+                id="waecAnswer"
+                style="margin-top:25px;">
+            </div>
+
+        </div>
+
+    </section>
 
 
-/* =========================
-   SELECT ANSWER
-========================= */
+    <!-- NOTES -->
 
-function selectAnswer(
+    <section
+        id="notes"
+        class="page">
+
+        <div class="section-title">
+
+            <h2>My Notes</h2>
+
+            <p>
+                Save your revision notes directly on
+                your device. Your notes remain available
+                offline.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <label for="noteTitle">
+                Note Title
+            </label>
+
+            <input
+                id="noteTitle"
+                type="text"
+                placeholder="Example: Physics — Motion">
+
+
+            <br><br>
+
+
+            <label for="noteContent">
+                Note
+            </label>
+
+            <textarea
+                id="noteContent"
+                placeholder="Write your revision notes here...">
+            </textarea>
+
+
+            <button
+                class="primary"
+                onclick="saveNote()">
+
+                Save Note
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="notesList"
+            style="margin-top:20px;">
+        </div>
+
+    </section>
+
+
+    <!-- QUIZ -->
+
+    <section
+        id="quiz"
+        class="page">
+
+        <div class="section-title">
+
+            <h2>WAEC Quiz</h2>
+
+            <p>
+                Generate five practice questions and
+                test your understanding.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <label for="quizSubject">
+                Choose a Subject
+            </label>
+
+            <select id="quizSubject">
+
+                <option>English Language</option>
+                <option>Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Biology</option>
+                <option>Economics</option>
+                <option>Government</option>
+                <option>Commerce</option>
+                <option>Marketing</option>
+                <option>Financial Accounting</option>
+                <option>Office Practice</option>
+                <option>Data Processing</option>
+                <option>Literature in English</option>
+                <option>Geography</option>
+                <option>Christian Religious Studies</option>
+                <option>Agricultural Science</option>
+
+            </select>
+
+
+            <button
+                class="primary"
+                onclick="generateQuiz()">
+
+                Start Quiz
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="quizContainer"
+            style="margin-top:20px;">
+        </div>
+
+    </section>
+
+
+    <!-- WEB SEARCH -->
+
+    <section
+        id="web"
+        class="page">
+
+        <div class="section-title">
+
+            <h2>Web Search</h2>
+
+            <p>
+                Search for study information and
+                educational resources.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <label for="webQuestion">
+                What do you want to search?
+            </label>
+
+            <input
+                id="webQuestion"
+                type="text"
+                placeholder="Example: WAEC Physics topics">
+
+
+            <button
+                class="primary"
+                onclick="searchWeb()">
+
+                Search
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="webResults"
+            style="margin-top:20px;">
+        </div>
+
+    </section>
+                  <!-- CHATS -->
+
+    <section
+        id="chats"
+        class="page">
+
+        <div class="section-title">
+
+            <h2>Saved Chats</h2>
+
+            <p>
+                Your last 10 AI conversations are
+                saved on this device for quick review.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <button
+                class="secondary"
+                onclick="clearChats()">
+
+                Clear Saved Chats
+
+            </button>
+
+        </div>
+
+        <div
+            id="chatHistory"
+            style="margin-top:20px;">
+        </div>
+
+    </section>
+
+
+    <!-- PROGRESS -->
+
+    <section
+        id="progress"
+        class="page">
+
+        <div class="section-title">
+
+            <h2>My Progress</h2>
+
+            <p>
+                See how your study activity is
+                developing over time.
+            </p>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="card">
+
+                <h3>Quizzes Completed</h3>
+
+                <div
+                    id="progressQuizzes"
+                    style="
+                        font-size:36px;
+                        font-weight:800;
+                        color:#2563eb;
+                        margin-top:15px;
+                    ">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Questions Answered</h3>
+
+                <div
+                    id="progressQuestions"
+                    style="
+                        font-size:36px;
+                        font-weight:800;
+                        color:#2563eb;
+                        margin-top:15px;
+                    ">
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Average Score</h3>
+
+                <div
+                    id="progressAverage"
+                    style="
+                        font-size:36px;
+                        font-weight:800;
+                        color:#2563eb;
+                        margin-top:15px;
+                    ">
+                    0%
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Notes Saved</h3>
+
+                <div
+                    id="progressNotes"
+                    style="
+                        font-size:36px;
+                        font-weight:800;
+                        color:#2563eb;
+                        margin-top:15px;
+                    ">
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="card"
+            style="margin-top:20px;">
+
+            <h3>Study Summary</h3>
+
+            <p
+                id="progressSummary"
+                style="margin-top:10px;">
+                Start studying to build your progress.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- PLANNER -->
+
+    <section
+        id="planner"
+        class="page">
+
+        <div class="section-title">
+
+            <h2>Study Planner</h2>
+
+            <p>
+                Create study tasks and keep track of
+                what you need to complete.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <label for="plannerTask">
+                Study Task
+            </label>
+
+            <input
+                id="plannerTask"
+                type="text"
+                placeholder="Example: Revise Mathematics — Algebra">
+
+
+            <br><br>
+
+
+            <label for="plannerSubject">
+                Subject
+            </label>
+
+            <select id="plannerSubject">
+
+                <option>English Language</option>
+                <option>Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Biology</option>
+                <option>Economics</option>
+                <option>Government</option>
+                <option>Commerce</option>
+                <option>Marketing</option>
+                <option>Financial Accounting</option>
+                <option>Office Practice</option>
+                <option>Data Processing</option>
+                <option>Literature in English</option>
+                <option>Geography</option>
+                <option>Christian Religious Studies</option>
+                <option>Agricultural Science</option>
+
+            </select>
+
+
+            <button
+                class="primary"
+                onclick="addPlannerTask()">
+
+                Add Study Task
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="plannerList"
+            style="margin-top:20px;">
+        </div>
+
+    </section>
+                  <!-- JAVASCRIPT -->
+
+    <script>
+
+        /* =========================
+           API
+        ========================= */
+
+        const API_URL =
+            "https://eclectic-gaufre-e909ee.netlify.app/api/search";
+
+
+        /* =========================
+           APP DATA
+        ========================= */
+
+        let currentQuiz = [];
+
+        let selectedAnswers = [];
+
+        let chatHistory =
+            JSON.parse(
+                localStorage.getItem(
+                    "KRON_LAST_10_CHATS"
+                ) || "[]"
+            );
+
+        let notes =
+            JSON.parse(
+                localStorage.getItem(
+                    "KRON_NOTES"
+                ) || "[]"
+            );
+
+        let plannerTasks =
+            JSON.parse(
+                localStorage.getItem(
+                    "KRON_PLANNER"
+                ) || "[]"
+            );
+
+        let progressData =
+            JSON.parse(
+                localStorage.getItem(
+                    "KRON_PROGRESS"
+                ) ||
+                '{"quizzes":0,"questions":0,"score":0}'
+            );
+
+
+        /* =========================
+           PAGE NAVIGATION
+        ========================= */
+
+        function showPage(pageId) {
+
+            document
+                .querySelectorAll(".page")
+                .forEach(function(page) {
+
+                    page.classList.remove("active");
+
+                });
+
+
+            const page =
+                document.getElementById(pageId);
+
+
+            if (page) {
+
+                page.classList.add("active");
+
+            }
+
+
+            document
+                .querySelectorAll("nav button")
+                .forEach(function(button) {
+
+                    button.classList.remove("active");
+
+                });
+
+
+            document
+                .querySelectorAll("nav button")
+                .forEach(function(button) {
+
+                    const action =
+                        button.getAttribute(
+                            "onclick"
+                        );
+
+                    if (
+                        action &&
+                        action.includes(
+                            "'" + pageId + "'"
+                        )
+                    ) {
+
+                        button.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                });
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+
+            if (pageId === "notes") {
+
+                renderNotes();
+
+            }
+
+
+            if (pageId === "planner") {
+
+                renderPlanner();
+
+            }
+
+
+            if (pageId === "progress") {
+
+                renderProgress();
+
+            }
+
+
+            if (pageId === "chats") {
+
+                renderChatHistory();
+
+            }
+
+        }
+
+
+        /* =========================
+           HTML SAFETY
+        ========================= */
+
+        function escapeHTML(value) {
+
+            return String(value || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =========================
+           CHAT STORAGE
+        ========================= */
+
+        function saveChat(
+            type,
+            question,
+            answer
+        ) {
+
+            chatHistory.unshift({
+
+                type: type,
+
+                question: question,
+
+                answer: answer,
+
+                date:
+                    new Date()
+                    .toLocaleString()
+
+            });
+
+
+            chatHistory =
+                chatHistory.slice(0, 10);
+
+
+            localStorage.setItem(
+                "KRON_LAST_10_CHATS",
+                JSON.stringify(chatHistory)
+            );
+
+
+            renderChatHistory();
+
+        }
+
+
+        function renderChatHistory() {
+
+            const box =
+                document.getElementById(
+                    "chatHistory"
+                );
+
+
+            if (!box) {
+
+                return;
+
+            }
+
+
+            if (!chatHistory.length) {
+
+                box.innerHTML = `
+                    <div class="card">
+                        <h3>No saved chats yet</h3>
+
+                        <p>
+                            Your last 10 AI conversations
+                            will appear here.
+                        </p>
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            box.innerHTML =
+                chatHistory
+                    .map(function(chat) {
+
+                        return `
+                            <div
+                                class="card"
+                                style="margin-bottom:15px;">
+
+                                <h3>
+                                    ${escapeHTML(
+                                        chat.type
+                                    )}
+                                </h3>
+
+                                <p>
+                                    <strong>
+                                        Question:
+                                    </strong>
+                                    ${escapeHTML(
+                                        chat.question
+                                    )}
+                                </p>
+
+                                <p
+                                    style="margin-top:10px;">
+                                    <strong>
+                                        Answer:
+                                    </strong>
+                                    ${escapeHTML(
+                                        chat.answer
+                                    )}
+                                </p>
+
+                                <p
+                                    style="
+                                        margin-top:10px;
+                                        font-size:13px;
+                                    ">
+
+                                    ${escapeHTML(
+                                        chat.date
+                                    )}
+
+                                </p>
+
+                            </div>
+                        `;
+
+                    })
+                    .join("");
+
+        }
+
+
+        function clearChats() {
+
+            if (
+                !confirm(
+                    "Clear all saved chats?"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            chatHistory = [];
+
+
+            localStorage.removeItem(
+                "KRON_LAST_10_CHATS"
+            );
+
+
+            renderChatHistory();
+
+        }
+
+
+        /* =========================
+           WAEC AI
+        ========================= */
+
+        async function askWAEC() {
+
+            const subject =
+                document.getElementById(
+                    "waecSubject"
+                ).value;
+
+
+            const question =
+                document.getElementById(
+                    "waecQuestion"
+                ).value.trim();
+
+
+            const answerBox =
+                document.getElementById(
+                    "waecAnswer"
+                );
+
+
+            if (!question) {
+
+                answerBox.innerHTML = `
+                    <div class="card">
+                        Please enter a question first.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            answerBox.innerHTML = `
+                <div class="card">
+                    <p>
+                        KRON is thinking...
+                    </p>
+                </div>
+            `;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    mode: "waec",
+
+                                    subject: subject,
+
+                                    question: question
+
+                                })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Request failed."
+                    );
+
+                }
+
+
+                const answer =
+                    data.answer ||
+                    "No answer was returned.";
+
+
+                answerBox.innerHTML = `
+                    <div class="card">
+
+                        <h3>
+                            KRON's Answer
+                        </h3>
+
+                        <p
+                            style="
+                                margin-top:12px;
+                                white-space:pre-wrap;
+                            ">
+
+                            ${escapeHTML(
+                                answer
+                            )}
+
+                        </p>
+
+                    </div>
+                `;
+
+
+                saveChat(
+                    "WAEC AI",
+                    subject +
+                    ": " +
+                    question,
+                    answer
+                );
+
+
+            } catch (error) {
+
+                answerBox.innerHTML = `
+                    <div class="card">
+
+                        <h3>
+                            Something went wrong
+                        </h3>
+
+                        <p>
+                            ${escapeHTML(
+                                error.message
+                            )}
+                        </p>
+
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================
+           WEB SEARCH
+        ========================= */
+
+        async function searchWeb() {
+
+            const question =
+                document.getElementById(
+                    "webQuestion"
+                ).value.trim();
+
+
+            const resultsBox =
+                document.getElementById(
+                    "webResults"
+                );
+
+
+            if (!question) {
+
+                resultsBox.innerHTML = `
+                    <div class="card">
+                        Enter something to search.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            resultsBox.innerHTML = `
+                <div class="card">
+                    <p>
+                        Searching...
+                    </p>
+                </div>
+            `;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    mode: "web",
+
+                                    subject: "",
+
+                                    question: question
+
+                                })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Search failed."
+                    );
+
+                }
+
+
+                const answer =
+                    data.answer ||
+                    "No result was returned.";
+
+
+                resultsBox.innerHTML = `
+                    <div class="card">
+
+                        <h3>
+                            Search Result
+                        </h3>
+
+                        <p
+                            style="
+                                margin-top:12px;
+                                white-space:pre-wrap;
+                            ">
+
+                            ${escapeHTML(
+                                answer
+                            )}
+
+                        </p>
+
+                    </div>
+                `;
+
+
+                saveChat(
+                    "Web Search",
+                    question,
+                    answer
+                );
+
+
+            } catch (error) {
+
+                resultsBox.innerHTML = `
+                    <div class="card">
+
+                        <h3>
+                            Something went wrong
+                        </h3>
+
+                        <p>
+                            ${escapeHTML(
+                                error.message
+                            )}
+                        </p>
+
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================
+           QUIZ GENERATOR
+        ========================= */
+
+        async function generateQuiz() {
+
+            const subject =
+                document.getElementById(
+                    "quizSubject"
+                ).value;
+
+
+            const quizBox =
+                document.getElementById(
+                    "quizContainer"
+                );
+
+
+            quizBox.innerHTML = `
+                <div class="card">
+                    <p>
+                        Generating your quiz...
+                    </p>
+                </div>
+            `;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    mode: "quiz",
+
+                                    subject: subject,
+
+                                    question:
+                                        "Create 5 WAEC-style multiple choice questions for " +
+                                        subject +
+                                        ". Include 4 options, the correct answer index, and a short explanation."
+
+                                })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Quiz generation failed."
+                    );
+
+                }
+
+
+                if (
+                    !data.quiz ||
+                    !Array.isArray(
+                        data.quiz.questions
+                    )
+                ) {
+
+                    throw new Error(
+                        "Invalid quiz returned."
+                    );
+
+                }
+
+
+                currentQuiz =
+                    data.quiz.questions;
+
+
+                selectedAnswers =
+                    new Array(
+                        currentQuiz.length
+                    ).fill(null);
+
+
+                renderQuiz();
+
+
+            } catch (error) {
+
+                quizBox.innerHTML = `
+                    <div class="card">
+
+                        <h3>
+                            Quiz Error
+                        </h3>
+
+                        <p>
+                            ${escapeHTML(
+                                error.message
+                            )}
+                        </p>
+
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================
+           RENDER QUIZ
+        ========================= */
+
+        function renderQuiz() {
+
+            const quizBox =
+                document.getElementById(
+                    "quizContainer"
+                );
+
+
+            if (!currentQuiz.length) {
+
+                quizBox.innerHTML = "";
+
+                return;
+
+            }
+
+
+            quizBox.innerHTML =
+
+                currentQuiz
+                    .map(function(item, index) {
+
+                        const options =
+                            item.options || [];
+
+
+                        return `
+                            <div
+                                class="card quiz-question"
+                                style="margin-bottom:20px;">
+
+                                <h3>
+                                    ${index + 1}.
+                                    ${escapeHTML(
+                                        item.question
+                                    )}
+                                </h3>
+
+
+                                <div
+                                    style="
+                                        margin-top:15px;
+                                        display:grid;
+                                        gap:10px;
+                                    ">
+
+                                    ${options
+                                        .map(
+                                            function(
+                                                option,
+                                                optionIndex
+                                            ) {
+
+                                                return `
+                                                    <button
+                                                        class="quiz-option"
+                                                        onclick="
+                                                            selectAnswer(
+                                                                ${index},
+                                                                ${optionIndex},
+                                                                this
+                                                            )
+                                                        "
+                                                        style="
+                                                            text-align:left;
+                                                            padding:14px;
+                                                            border:1px solid #dbe3ef;
+                                                            background:white;
+                                                            border-radius:12px;
+                                                        ">
+
+                                                        ${escapeHTML(
+                                                            option
+                                                        )}
+
+                                                    </button>
+                                                `;
+
+                                            }
+                                        )
+                                        .join("")}
+
+                                </div>
+
+                            </div>
+                        `;
+
+                    })
+                    .join("") +
+
+                `
+                    <button
+                        class="primary"
+                        onclick="finishQuiz()">
+
+                        Finish Quiz
+
+                    </button>
+
+                    <div
+                        id="quizScore"
+                        style="margin-top:20px;">
+                    </div>
+                `;
+
+        }
+
+
+        /* =========================
+           SELECT ANSWER
+        ========================= */
+
+        function selectAnswer(
     questionIndex,
     optionIndex,
     button
 ) {
 
-    selectedAnswers[
-        questionIndex
-    ] = optionIndex;
-
+    selectedAnswers[questionIndex] =
+        optionIndex;
 
     const questionBox =
-        button.closest(
-            ".quiz-question"
-        );
-
+        button.closest(".quiz-question");
 
     questionBox
-        .querySelectorAll(
-            ".quiz-option"
-        )
+        .querySelectorAll(".quiz-option")
         .forEach(function(btn) {
 
-            btn.classList.remove(
-                "selected"
-            );
+            btn.style.background = "white";
+            btn.style.color = "#172033";
+            btn.style.borderColor = "#dbe3ef";
 
         });
 
+    button.style.background = "#2563eb";
+    button.style.color = "white";
+    button.style.borderColor = "#2563eb";
+}
 
-    button.classList.add(
-        "selected"
-    );
-        }
-    function finishQuiz() {
+
+/* =========================
+   FINISH QUIZ
+========================= */
+
+function finishQuiz() {
 
     const scoreBox =
-        document.getElementById(
-            "quizScore"
-        );
-
+        document.getElementById("quizScore");
 
     if (!currentQuiz.length) {
-
         return;
     }
 
-
     let score = 0;
-
 
     currentQuiz.forEach(
         function(item, index) {
@@ -1219,27 +1685,21 @@ function selectAnswer(
             const selected =
                 selectedAnswers[index];
 
-
             const correct =
                 Number(item.answer);
-
 
             if (
                 selected !== null &&
                 selected === correct
             ) {
-
                 score++;
-
             }
 
         }
     );
 
-
     const total =
         currentQuiz.length;
-
 
     const percentage =
         Math.round(
@@ -1247,20 +1707,41 @@ function selectAnswer(
         );
 
 
+    /* SAVE PROGRESS */
+
+    progressData.quizzes++;
+
+    progressData.questions += total;
+
+    progressData.score += percentage;
+
+    localStorage.setItem(
+        "KRON_PROGRESS",
+        JSON.stringify(progressData)
+    );
+
+
     scoreBox.innerHTML = `
         <div class="card">
 
-            <div class="score">
+            <h2>
+                Quiz Complete
+            </h2>
+
+            <div
+                style="
+                    font-size:42px;
+                    font-weight:800;
+                    color:#2563eb;
+                    margin:15px 0;
+                ">
+
                 ${score} / ${total}
+
             </div>
 
             <p>
                 Score: ${percentage}%
-            </p>
-
-            <p class="small">
-                Review the explanations below
-                to learn from the questions.
             </p>
 
         </div>
@@ -1271,70 +1752,46 @@ function selectAnswer(
         function(item, index) {
 
             const questionBox =
-                document
-                    .querySelectorAll(
-                        ".quiz-question"
-                    )[index];
-
+                document.querySelectorAll(
+                    ".quiz-question"
+                )[index];
 
             if (!questionBox) {
                 return;
             }
 
-
             const explanation =
                 item.explanation ||
                 "No explanation provided.";
 
-
             const selected =
                 selectedAnswers[index];
-
 
             const correct =
                 Number(item.answer);
 
-
-            let resultText;
-
-
-            if (
-                selected !== null &&
-                selected === correct
-            ) {
-
-                resultText =
-                    "Correct";
-
-            } else {
-
-                resultText =
-                    "Incorrect";
-
-            }
-
-
             const feedback =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
+            feedback.className = "card";
 
-            feedback.className =
-                "answer";
+            feedback.style.marginTop =
+                "15px";
 
+            feedback.innerHTML = `
+                <strong>
+                    ${
+                        selected !== null &&
+                        selected === correct
+                            ? "Correct"
+                            : "Incorrect"
+                    }
+                </strong>
 
-            feedback.innerHTML =
-                `
-                    <strong>
-                        ${resultText}
-                    </strong>
-
-                    <br><br>
-
+                <p style="margin-top:8px;">
                     ${escapeHTML(explanation)}
-                `;
-
+                </p>
+            `;
 
             questionBox.appendChild(
                 feedback
@@ -1358,6 +1815,451 @@ function selectAnswer(
         "%)"
     );
 
+    renderProgress();
+}
+
+
+/* =========================
+   NOTES
+========================= */
+
+function saveNote() {
+
+    const title =
+        document.getElementById(
+            "noteTitle"
+        ).value.trim();
+
+    const content =
+        document.getElementById(
+            "noteContent"
+        ).value.trim();
+
+    if (!title || !content) {
+
+        alert(
+            "Please enter a title and note."
+        );
+
+        return;
+    }
+
+    notes.unshift({
+
+        id: Date.now(),
+
+        title: title,
+
+        content: content,
+
+        date:
+            new Date()
+            .toLocaleDateString()
+
+    });
+
+    localStorage.setItem(
+        "KRON_NOTES",
+        JSON.stringify(notes)
+    );
+
+    document.getElementById(
+        "noteTitle"
+    ).value = "";
+
+    document.getElementById(
+        "noteContent"
+    ).value = "";
+
+    renderNotes();
+
+    renderProgress();
+}
+
+
+/* =========================
+   RENDER NOTES
+========================= */
+
+function renderNotes() {
+
+    const box =
+        document.getElementById(
+            "notesList"
+        );
+
+    if (!box) {
+        return;
+    }
+
+    if (!notes.length) {
+
+        box.innerHTML = `
+            <div class="card">
+
+                <h3>
+                    No notes yet
+                </h3>
+
+                <p>
+                    Your saved revision notes
+                    will appear here.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    box.innerHTML =
+        notes.map(function(note) {
+
+            return `
+                <div
+                    class="card"
+                    style="margin-bottom:15px;">
+
+                    <h3>
+                        ${escapeHTML(
+                            note.title
+                        )}
+                    </h3>
+
+                    <p
+                        style="
+                            margin-top:10px;
+                            white-space:pre-wrap;
+                        ">
+
+                        ${escapeHTML(
+                            note.content
+                        )}
+
+                    </p>
+
+                    <p
+                        style="
+                            margin-top:10px;
+                            font-size:13px;
+                        ">
+
+                        Saved:
+                        ${escapeHTML(
+                            note.date
+                        )}
+
+                    </p>
+
+                    <button
+                        class="secondary"
+                        style="margin-top:12px;"
+                        onclick="
+                            deleteNote(
+                                ${note.id}
+                            )
+                        ">
+
+                        Delete
+
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+}
+
+
+function deleteNote(id) {
+
+    notes =
+        notes.filter(
+            function(note) {
+
+                return note.id !== id;
+
+            }
+        );
+
+    localStorage.setItem(
+        "KRON_NOTES",
+        JSON.stringify(notes)
+    );
+
+    renderNotes();
+
+    renderProgress();
+                  }
+      /* =========================
+   PLANNER
+========================= */
+
+function addPlannerTask() {
+
+    const task =
+        document.getElementById(
+            "plannerTask"
+        ).value.trim();
+
+    const subject =
+        document.getElementById(
+            "plannerSubject"
+        ).value;
+
+    if (!task) {
+
+        alert(
+            "Enter a study task first."
+        );
+
+        return;
+    }
+
+    plannerTasks.push({
+
+        id: Date.now(),
+
+        task: task,
+
+        subject: subject,
+
+        completed: false
+
+    });
+
+    localStorage.setItem(
+        "KRON_PLANNER",
+        JSON.stringify(
+            plannerTasks
+        )
+    );
+
+    document.getElementById(
+        "plannerTask"
+    ).value = "";
+
+    renderPlanner();
+}
+
+
+function renderPlanner() {
+
+    const box =
+        document.getElementById(
+            "plannerList"
+        );
+
+    if (!box) {
+        return;
+    }
+
+    if (!plannerTasks.length) {
+
+        box.innerHTML = `
+            <div class="card">
+
+                <h3>
+                    No study tasks yet
+                </h3>
+
+                <p>
+                    Add your first study task above.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    box.innerHTML =
+        plannerTasks.map(function(item) {
+
+            return `
+                <div
+                    class="card"
+                    style="margin-bottom:15px;">
+
+                    <h3>
+                        ${escapeHTML(
+                            item.task
+                        )}
+                    </h3>
+
+                    <p>
+                        Subject:
+                        ${escapeHTML(
+                            item.subject
+                        )}
+                    </p>
+
+                    <button
+                        class="primary"
+                        onclick="
+                            togglePlannerTask(
+                                ${item.id}
+                            )
+                        ">
+
+                        ${
+                            item.completed
+                                ? "Mark Incomplete"
+                                : "Mark Complete"
+                        }
+
+                    </button>
+
+                    <button
+                        class="secondary"
+                        onclick="
+                            deletePlannerTask(
+                                ${item.id}
+                            )
+                        ">
+
+                        Delete
+
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+}
+
+
+function togglePlannerTask(id) {
+
+    plannerTasks =
+        plannerTasks.map(
+            function(item) {
+
+                if (item.id === id) {
+
+                    item.completed =
+                        !item.completed;
+
+                }
+
+                return item;
+
+            }
+        );
+
+    localStorage.setItem(
+        "KRON_PLANNER",
+        JSON.stringify(
+            plannerTasks
+        )
+    );
+
+    renderPlanner();
+}
+
+
+function deletePlannerTask(id) {
+
+    plannerTasks =
+        plannerTasks.filter(
+            function(item) {
+
+                return item.id !== id;
+
+            }
+        );
+
+    localStorage.setItem(
+        "KRON_PLANNER",
+        JSON.stringify(
+            plannerTasks
+        )
+    );
+
+    renderPlanner();
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function renderProgress() {
+
+    const quizzes =
+        document.getElementById(
+            "progressQuizzes"
+        );
+
+    const questions =
+        document.getElementById(
+            "progressQuestions"
+        );
+
+    const average =
+        document.getElementById(
+            "progressAverage"
+        );
+
+    const noteCount =
+        document.getElementById(
+            "progressNotes"
+        );
+
+    const summary =
+        document.getElementById(
+            "progressSummary"
+        );
+
+    if (!quizzes) {
+        return;
+    }
+
+    quizzes.textContent =
+        progressData.quizzes;
+
+    questions.textContent =
+        progressData.questions;
+
+    noteCount.textContent =
+        notes.length;
+
+    if (progressData.quizzes > 0) {
+
+        average.textContent =
+            Math.round(
+                progressData.score /
+                progressData.quizzes
+            ) + "%";
+
+    } else {
+
+        average.textContent =
+            "0%";
+
+    }
+
+    if (progressData.quizzes === 0) {
+
+        summary.textContent =
+            "Start your first quiz to begin building your study progress.";
+
+    } else {
+
+        summary.textContent =
+            "You have completed " +
+            progressData.quizzes +
+            " quiz" +
+            (
+                progressData.quizzes === 1
+                    ? ""
+                    : "zes"
+            ) +
+            " and answered " +
+            progressData.questions +
+            " questions.";
+
+    }
 }
 
 
@@ -1365,10 +2267,34 @@ function selectAnswer(
    INITIAL LOAD
 ========================= */
 
+renderNotes();
+
+renderPlanner();
+
+renderProgress();
+
 renderChatHistory();
 
 </script>
 
+</main>
+
+
+<footer
+    style="
+        width:100%;
+        max-width:1200px;
+        margin:auto;
+        padding:20px;
+        text-align:center;
+        color:#64748b;
+        font-size:14px;
+    ">
+
+    KRON Study AI —
+    Learn. Practice. Improve.
+
+</footer>
+
 </body>
 </html>
-            
